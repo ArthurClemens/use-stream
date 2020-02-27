@@ -1,0 +1,2 @@
+!function(e,t){"object"==typeof exports&&"undefined"!=typeof module?t(exports,require("react")):"function"==typeof define&&define.amd?define(["exports","react"],t):t((e=e||self).useStream={},e.React)}(this,(function(e,t){"use strict";const r=e=>{const[,r]=t.useState();t.useEffect(()=>{e.map(r)},[])};e.useStream=({model:e,onMount:n,onDestroy:o})=>{const u=t.useRef(e);return Object.keys(e).forEach(t=>r(e[t])),t.useEffect(()=>{if(n&&n(u.current),o)return()=>o(u.current)},[]),u.current},Object.defineProperty(e,"__esModule",{value:!0})}));
+//# sourceMappingURL=use-stream.js.map

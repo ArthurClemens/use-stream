@@ -1,0 +1,42 @@
+{
+  "name": "use-stream",
+  "version": "0.1.0",
+  "description": "Enables React applications to work with streams.",
+  "main": "dist/use-stream",
+  "module": "dist/use-stream.mjs",
+  "scripts": {
+    "clean": "rm -rf dist/*",
+    "rollup": "MODULE_NAME=useStream TYPESCRIPT=1 ./node_modules/rollup/dist/bin/rollup -c ./scripts/rollup.umd.js && TYPESCRIPT=1 ./node_modules/rollup/dist/bin/rollup -c ./scripts/rollup.es.js ",
+    "build": "npm run clean && npm run rollup && npm run size",
+    "size": "gzip -c dist/use-stream.js | wc -c"
+  },
+  "files": [
+    "dist",
+    "index.d.ts",
+    "README.md"
+  ],
+  "author": "Arthur Clemens <arthurclemens@gmail.com> (http://visiblearea.com)",
+  "homepage": "https://github.com/ArthurClemens/use-stream",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.8.6",
+    "@babel/plugin-external-helpers": "^7.8.3",
+    "@babel/plugin-transform-arrow-functions": "^7.8.3",
+    "@babel/plugin-transform-object-assign": "^7.8.3",
+    "@babel/preset-env": "^7.8.6",
+    "@babel/preset-typescript": "^7.8.3",
+    "@babel/register": "^7.8.6",
+    "@types/mithril": "^2.0.2",
+    "@types/react": "^16.9.23",
+    "babel-core": "^7.0.0-bridge.0",
+    "react": "^16.13.0",
+    "rollup": "^1.31.1",
+    "rollup-plugin-babel": "^4.3.3",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-terser": "^5.2.0",
+    "rollup-plugin-typescript2": "^0.26.0",
+    "typescript": "^3.8.2"
+  }
+}
