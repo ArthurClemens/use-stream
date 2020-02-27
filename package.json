@@ -1,6 +1,6 @@
 {
   "name": "use-stream",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Enables React applications to work with streams.",
   "main": "dist/use-stream",
   "module": "dist/use-stream.mjs",
@@ -30,7 +30,6 @@
     "@types/mithril": "^2.0.2",
     "@types/react": "^16.9.23",
     "babel-core": "^7.0.0-bridge.0",
-    "react": "^16.13.0",
     "rollup": "^1.31.1",
     "rollup-plugin-babel": "^4.3.3",
     "rollup-plugin-commonjs": "^10.1.0",
@@ -38,5 +37,8 @@
     "rollup-plugin-terser": "^5.2.0",
     "rollup-plugin-typescript2": "^0.26.0",
     "typescript": "^3.8.2"
+  },
+  "peerDependencies": {
+    "react": "^16.13.0"
   }
 }
