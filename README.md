@@ -17,10 +17,21 @@ Streams are memoized so that they are initialized only once.
 
 `npm install use-stream`
 
-You can use any stream library. In these examples we'll use the lightweight stream module from Mithril, which comes separate from Mithril core code.
+You can use any stream library. In the examples below we'll use the lightweight stream module from Mithril, which comes separate from Mithril core code.
+
+### With Mithril
 
 `npm install mithril`
 
+```js
+import stream from "mithril/stream";
+```
+
+### With Flyd
+
+```js
+import { stream } from "flyd";
+```
 
 ## API
 
@@ -57,7 +68,8 @@ onDestroy: (model) => {
 
 ### Simple counter
 
-[Example on CodeSandbox](https://codesandbox.io/s/usestream-simple-counter-futo1)
+* [Mithril example on CodeSandbox](https://codesandbox.io/s/usestream-simple-counter-futo1)
+* [Flyd example on CodeSandbox](https://codesandbox.io/s/usestream-simple-counter-with-flyd-85hw6)
 
 ```js
 import React from "react";
