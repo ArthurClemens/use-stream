@@ -68,8 +68,8 @@ onDestroy: (model) => {
 
 ### Simple counter
 
-* [Mithril example on CodeSandbox](https://codesandbox.io/s/usestream-simple-counter-futo1)
-* [Flyd example on CodeSandbox](https://codesandbox.io/s/usestream-simple-counter-with-flyd-85hw6)
+* [React with Mithril streams on CodeSandbox](https://codesandbox.io/s/usestream-simple-counter-futo1)
+* [React with Flyd streams on CodeSandbox](https://codesandbox.io/s/usestream-simple-counter-with-flyd-85hw6)
 
 ```js
 import React from "react";
@@ -99,7 +99,7 @@ const App = () => {
 
 ### Example with James Forbes' useInterval
 
-[Example on CodeSandbox](https://codesandbox.io/s/usestream-with-useinterval-hi9od)
+[React with Mithril streams on CodeSandbox](https://codesandbox.io/s/usestream-with-useinterval-hi9od)
 
 ```js
 import React from "react";
