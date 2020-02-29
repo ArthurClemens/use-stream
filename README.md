@@ -3,7 +3,7 @@
 A React Hook for working with streams inside function components.
 
 - [Motivation](#motivation)
-- [Live examples](#live-examples)
+- [Live examples on CodeSandbox](#live-examples-on-codesandbox)
 - [Usage](#usage)
 - [API](#api)
   - [Parameters](#parameters)
@@ -34,12 +34,13 @@ This is where `useStream` comes in:
 
 
 
-## Live examples
+## Live examples on CodeSandbox
 
-* [Simple counter on CodeSandbox](https://codesandbox.io/s/usestream-simple-counter-futo1)
-* [James Forbes' useInterval on CodeSandbox](https://codesandbox.io/s/usestream-with-useinterval-hi9od)
-* [Flyd example: simple sum on CodeSandbox](https://codesandbox.io/s/usestream-flyd-example-sum-0hw32)
-* [Ramda example: filtered input on CodeSandbox](https://codesandbox.io/s/usestream-ramda-filter-w05t2)
+* [Simple counter](https://codesandbox.io/s/usestream-simple-counter-futo1)
+* [James Forbes' useInterval](https://codesandbox.io/s/usestream-with-useinterval-hi9od)
+* [Meisois pattern for a counter](https://codesandbox.io/s/usestream-meiosis-pattern-fsu7e)
+* [Flyd example: simple sum](https://codesandbox.io/s/usestream-flyd-example-sum-0hw32)
+* [Ramda example: filtered input](https://codesandbox.io/s/usestream-ramda-filter-w05t2)
 
 
 ## Usage
@@ -233,8 +234,8 @@ initLazily?: boolean;
 
 ### Simple counter
 
-* [React with Mithril streams on CodeSandbox](https://codesandbox.io/s/usestream-simple-counter-futo1)
-* [React with Flyd streams on CodeSandbox](https://codesandbox.io/s/usestream-simple-counter-with-flyd-85hw6)
+* [React with Mithril streams](https://codesandbox.io/s/usestream-simple-counter-futo1)
+* [React with Flyd streams](https://codesandbox.io/s/usestream-simple-counter-with-flyd-85hw6)
 
 ```js
 import React from "react";
@@ -261,7 +262,7 @@ const App = () => {
 
 ### Example with James Forbes' useInterval
 
-[React with Mithril streams on CodeSandbox](https://codesandbox.io/s/usestream-with-useinterval-hi9od)
+[React with Mithril streams](https://codesandbox.io/s/usestream-with-useinterval-hi9od)
 
 ```js
 import React from "react";
