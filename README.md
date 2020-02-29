@@ -1,8 +1,9 @@
 # useStream
 
-A React Hook for working with streams.
+A React Hook for working with streams inside function components.
 
 - [Motivation](#motivation)
+- [Live examples](#live-examples)
 - [Usage](#usage)
 - [API](#api)
   - [Parameters](#parameters)
@@ -14,6 +15,7 @@ A React Hook for working with streams.
   - [Simple counter](#simple-counter)
   - [Example with James Forbes' useInterval](#example-with-james-forbes-useinterval)
 - [Size](#size)
+
 
 
 ## Motivation
@@ -30,6 +32,14 @@ This is where `useStream` comes in:
 * Memoizes streams so that they are initialized only once.
 * Re-renders the component whenever a stream is updated.
 
+
+
+## Live examples
+
+* [Simple counter on CodeSandbox](https://codesandbox.io/s/usestream-simple-counter-futo1)
+* [James Forbes' useInterval on CodeSandbox](https://codesandbox.io/s/usestream-with-useinterval-hi9od)
+* [Flyd example: simple sum on CodeSandbox](https://codesandbox.io/s/usestream-flyd-example-sum-0hw32)
+* [Ramda example: filtered input on CodeSandbox](https://codesandbox.io/s/usestream-ramda-filter-w05t2)
 
 
 ## Usage
@@ -51,6 +61,8 @@ or use another stream library like [Flyd](https://github.com/paldepind/flyd):
 ```js
 import { stream } from "flyd";
 ```
+
+
 
 ## API
 
@@ -216,6 +228,7 @@ initLazily?: boolean;
 ```
 
 
+
 ## Examples 
 
 ### Simple counter
@@ -244,7 +257,6 @@ const App = () => {
     </div>
   );
 }
-
 ```
 
 ### Example with James Forbes' useInterval
@@ -314,6 +326,8 @@ const App = () => {
   );
 }
 ```
+
+
 
 ## Size
 
