@@ -1,6 +1,6 @@
 {
   "name": "use-stream",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "React Hook for working with streams.",
   "main": "dist/use-stream",
   "module": "dist/use-stream.mjs",

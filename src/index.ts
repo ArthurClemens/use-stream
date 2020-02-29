@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { UseStream } from "../index";
 
-export const useStream: UseStream.useStream = ({ initLazily, model, onMount, onDestroy }) => {
+export const useStream: UseStream.useStream = ({ defer, model, onMount, onDestroy }) => {
   // Memoized model
-  const [memo, setMemo] = useState(!initLazily
+  const [memo, setMemo] = useState(!defer
     ? typeof model === "function" ? model() : model
     : null
   );
@@ -14,11 +14,11 @@ export const useStream: UseStream.useStream = ({ initLazily, model, onMount, onD
   useEffect(() => {
     // Because this function only runs once, we need to have the value of memo.
     // So we cannot wait for the result of setState(memo).
-    const localMemo: UseStream.Model = !initLazily
+    const localMemo: UseStream.Model = !defer
       ? memo // already stored
       : typeof model === "function" ? model() : model;
     
-    if (initLazily) {
+    if (defer) {
       setMemo(localMemo);
     }
 

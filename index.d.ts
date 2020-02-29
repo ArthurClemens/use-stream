@@ -7,7 +7,7 @@ export namespace UseStream {
 
   type ModelFn = (_?:any) => Model
 
-  export type useStream = ({ model, onMount, onDestroy, initLazily } : {
+  export type useStream = ({ model, onMount, onDestroy, defer } : {
     /**
      * The model is a POJO object with (optionally multiple) streams.
      * `useStream` returns this model once it is initialized.
@@ -24,7 +24,7 @@ export namespace UseStream {
      * const { index, count } = model
      * 
      * 
-     * For more flexibility, pass a function that returns the model object. See also `initLazily` 
+     * For more flexibility, pass a function that returns the model object. See also `defer` 
      * how to combine this for optimization.
      * 
      * Example:
@@ -58,14 +58,14 @@ export namespace UseStream {
      * Optimization to prevent that stream initialization functions are ran at each render.
      * The default behavior does not mean that streams are reset (as their results are memoized),
      * but this optimization may prevent problems when model streams involve calling side effects.
-     * Technically, `initLazily` will postpone the initialization functions until after the first
+     * Technically, `defer` will postpone the initialization functions until after the first
      * render (in React.useEffect). That means that in the first render the model will not be
      * available yet.
      * 
      * Example:
      * 
      * const model = useStream({
-     *   initLazily: true,
+     *   defer: true,
      *   model: {
      *     index: stream(0),
      *     count: stream(3)
@@ -94,7 +94,7 @@ export namespace UseStream {
      * }
      * 
      * const model = useStream({
-     *   initLazily: true,
+     *   defer: true,
      *   model: createModel({ defaultIndex: 1 })
      * })
      * 
@@ -105,7 +105,7 @@ export namespace UseStream {
      * const { index } = model
      * 
      */
-    initLazily?: boolean;
+    defer?: boolean;
   }) => Model;
 
 }

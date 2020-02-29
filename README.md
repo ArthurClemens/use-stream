@@ -10,7 +10,7 @@ A React Hook for working with streams inside function components.
     - [`model`](#model)
     - [`onMount`](#onmount)
     - [`onDestroy`](#ondestroy)
-    - [`initLazily`](#initlazily)
+    - [`defer`](#defer)
 - [Examples](#examples)
   - [Simple counter](#simple-counter)
   - [Example with James Forbes' useInterval](#example-with-james-forbes-useinterval)
@@ -68,7 +68,7 @@ import { stream } from "flyd";
 ## API
 
 ```ts
-useStream({ model, onMount?, onDestroy?, initLazily? }) => model
+useStream({ model, onMount?, onDestroy?, defer? }) => model
 ```
 
 ### Parameters
@@ -103,7 +103,7 @@ const { index, count } = useStream({
 })
 ```
  
-For more flexibility, pass a function that returns the model object. See also `initLazily` 
+For more flexibility, pass a function that returns the model object. See also `defer` 
 how to combine this for optimization.
  
 Example:
@@ -166,13 +166,13 @@ Type definition:
 onDestroy?: (model: Model) => any;
 ```
 
-#### `initLazily`
+#### `defer`
 
 Optimization to prevent that stream initialization functions are ran at each render.
 The default behavior does not mean that streams are reset (as their results are memoized),
 but this optimization may prevent problems when model streams involve calling side effects.
 
-Technically, `initLazily` will postpone the initialization functions until after the first
+Technically, `defer` will postpone the initialization functions until after the first
 render (in `React.useEffect`). That means that in the first render the model will not be
 available yet.
 
@@ -180,7 +180,7 @@ Example:
 
 ```js
 const model = useStream({
-  initLazily: true,
+  defer: true,
   model: {
     index: stream(0),
     count: stream(3)
@@ -211,7 +211,7 @@ const createModel = ({ defaultIndex = 0 }) => {
 }
 
 const model = useStream({
-  initLazily: true,
+  defer: true,
   model: createModel({ defaultIndex: 1 })
 })
 
@@ -225,7 +225,7 @@ const { index } = model
 Type definition:
 
 ```ts
-initLazily?: boolean;
+defer?: boolean;
 ```
 
 
