@@ -152,11 +152,11 @@ onMount?: (model: Model) => any;
 
 #### `onDestroy`
 
+Callback method to clean up side effects. `onDestroy` is called when the containing component goes out of scope.
 
 ```js
 onDestroy: (model) => {
-  // cleanup, for example:
-  // model.count.end(true)
+  // cleanup
 }
 ```
 

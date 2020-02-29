@@ -49,7 +49,7 @@ export namespace UseStream {
     onMount?: (model: Model) => any;
 
     /**
-     * Callback method to clean up side effects and to stop streams (if necessary). This is called
+     * Callback method to clean up side effects. onDestroy is called
      * when the containing component goes out of scope.
      */
     onDestroy?: (model: Model) => any;
