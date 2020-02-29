@@ -34,12 +34,12 @@ const useStream = ({ defer, model, onMount, onDestroy }) => {
         if (onMount) {
             onMount(memoValue);
         }
-        if (onDestroy) {
-            return () => {
+        return () => {
+            if (onDestroy) {
                 onDestroy(memoValue);
-            };
-        }
-    }, [onMount, onDestroy]); // eslint-disable-line react-hooks/exhaustive-deps
+            }
+        };
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
     return memo;
 };
 
