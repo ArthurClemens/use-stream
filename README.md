@@ -3,7 +3,8 @@
 A React Hook for working with streams inside function components.
 
 - [Motivation](#motivation)
-- [Live examples on CodeSandbox](#live-examples-on-codesandbox)
+- [Example](#example)
+- [Live examples](#live-examples)
 - [Usage](#usage)
 - [API](#api)
   - [Parameters](#parameters)
@@ -11,9 +12,6 @@ A React Hook for working with streams inside function components.
     - [`onMount`](#onmount)
     - [`onDestroy`](#ondestroy)
     - [`defer`](#defer)
-- [Examples](#examples)
-  - [Simple counter](#simple-counter)
-  - [Example with James Forbes' useInterval](#example-with-james-forbes-useinterval)
 - [Size](#size)
 
 
@@ -33,10 +31,43 @@ This is where `useStream` comes in:
 * Re-renders the component whenever a stream is updated.
 
 
+## Example
 
-## Live examples on CodeSandbox
+```jsx
+import React from "react";
+import { useStream } from "use-stream";
+import stream from "mithril/stream"; // or another stream library
+
+const App = () => {
+  const { count } = useStream({
+    model: {
+      count: stream(0)
+    }
+  });
+  return (
+    <div className="page">
+      <h1>{count()}</h1>
+      <p>
+        <button
+          onClick={() => count(count() - 1)}
+          disabled={count() === 0}
+        >
+          Decrement
+        </button>
+        <button onClick={() => count(count() + 1)}>Increment</button>
+      </p>
+    </div>
+  );
+}
+```
+
+
+## Live examples
+
+Code examples on CodeSandbox:
 
 * [Simple counter](https://codesandbox.io/s/usestream-simple-counter-futo1)
+  * [The same simple counter with Flyd](https://codesandbox.io/s/usestream-simple-counter-with-flyd-85hw6)
 * [James Forbes' useInterval](https://codesandbox.io/s/usestream-with-useinterval-hi9od)
 * [Meisois pattern for a counter](https://codesandbox.io/s/usestream-meiosis-pattern-fsu7e)
 * [Flyd example: simple sum](https://codesandbox.io/s/usestream-flyd-example-sum-0hw32)
@@ -227,107 +258,6 @@ Type definition:
 ```ts
 defer?: boolean;
 ```
-
-
-
-## Examples 
-
-### Simple counter
-
-* [React with Mithril streams](https://codesandbox.io/s/usestream-simple-counter-futo1)
-* [React with Flyd streams](https://codesandbox.io/s/usestream-simple-counter-with-flyd-85hw6)
-
-```js
-import React from "react";
-import { useStream } from "use-stream";
-import stream from "mithril/stream";
-
-const App = () => {
-  const { count } = useStream({
-    model: {
-      count: stream(0)
-    }
-  });
-  return (
-    <div className="page">
-      <h1>{count()}</h1>
-      <p>
-        <button onClick={() => count(count() - 1)} disabled={count() === 0}>Decrement</button>
-        <button onClick={() => count(count() + 1)}>Increment</button>
-      </p>
-    </div>
-  );
-}
-```
-
-### Example with James Forbes' useInterval
-
-[React with Mithril streams](https://codesandbox.io/s/usestream-with-useinterval-hi9od)
-
-```js
-import React from "react";
-import { useStream } from "use-stream";
-import stream from "mithril/stream";
-
-import "./styles.css";
-
-// Code comments at https://james-forbes.com/#!/posts/hooks-and-streams
-const interval = ({ delay }) => {
-  const id = stream();
-  const tick = stream();
-
-  delay.map(delay => {
-    clearInterval(id());
-    id(setInterval(tick, delay, delay));
-    return null;
-  });
-
-  delay.end.map(() => {
-    clearInterval(id());
-    return null;
-  });
-
-  return tick;
-};
-
-const UNIT = 100;
-const INIT_DELAY = 500;
-
-const App = () => {
-  const model = useStream({
-    model: {
-      delay: stream(INIT_DELAY),
-      count: stream(0)
-    },
-    onMount: ({ count, delay }) => {
-      const tick = interval({ delay });
-      tick.map(() => count(count() + 1));
-    },
-    onDestroy: ({ count, delay }) => {
-      // Clean up
-      delay.end(true);
-    }
-  });
-  const { count, delay } = model;
-
-  return (
-    <div className="page">
-      <h1>{count()}</h1>
-      <p>Delay: {delay()} ms</p>
-      <p>
-        <button
-          onClick={() => delay(delay() - UNIT)}
-          disabled={delay() === UNIT}
-        >
-          Decrement
-        </button>
-        <button onClick={() => delay(delay() + UNIT)}>Increment</button>
-      </p>
-    </div>
-  );
-}
-```
-
 
 
 ## Size
