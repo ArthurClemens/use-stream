@@ -1,14 +1,31 @@
 {
-  "include": ["src/**/*", "index.d.ts"],
-  "exclude": ["node_modules/*"],
+  "include": [
+    "src/**/*",
+    "index.d.ts"
+  ],
+  "exclude": [
+    "node_modules/*"
+  ],
   "compilerOptions": {
-    "target": "ESNEXT",                  
-    "module": "ESNEXT",                  
-    "strict": true,                      
-    "noUnusedLocals": true,              
-    "moduleResolution": "node",          
-    "types": [],                         
+    "target": "ESNEXT",
+    "module": "ESNEXT",
+    "strict": true,
+    "noUnusedLocals": true,
+    "moduleResolution": "node",
+    "types": [],
     "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "preserve"
   }
 }

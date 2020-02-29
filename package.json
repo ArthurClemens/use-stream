@@ -1,13 +1,14 @@
 {
   "name": "use-stream",
-  "version": "0.1.1",
-  "description": "Enables React applications to work with streams.",
+  "version": "0.2.0",
+  "description": "React Hook for working with streams.",
   "main": "dist/use-stream",
   "module": "dist/use-stream.mjs",
   "scripts": {
     "clean": "rm -rf dist/*",
     "rollup": "MODULE_NAME=useStream TYPESCRIPT=1 ./node_modules/rollup/dist/bin/rollup -c ./scripts/rollup.umd.js && TYPESCRIPT=1 ./node_modules/rollup/dist/bin/rollup -c ./scripts/rollup.es.js ",
     "build": "npm run clean && npm run rollup && npm run size",
+    "test": "react-scripts test --env=jsdom",
     "size": "gzip -c dist/use-stream.js | wc -c"
   },
   "files": [
@@ -30,13 +31,14 @@
     "@types/mithril": "^2.0.2",
     "@types/react": "^16.9.23",
     "babel-core": "^7.0.0-bridge.0",
-    "rollup": "^1.31.1",
+    "react-scripts": "3.4.0",
+    "rollup": "^1.32.0",
     "rollup-plugin-babel": "^4.3.3",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-terser": "^5.2.0",
     "rollup-plugin-typescript2": "^0.26.0",
-    "typescript": "^3.8.2"
+    "typescript": "^3.8.3"
   },
   "peerDependencies": {
     "react": "^16.13.0"

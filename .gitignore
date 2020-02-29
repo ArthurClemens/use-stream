@@ -5,3 +5,4 @@ npm-debug.log*
 *.lock
 package-lock.json
 .rpt2_cache
+react-app-env.d.ts
