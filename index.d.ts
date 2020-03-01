@@ -1,5 +1,5 @@
 
-export namespace UseStream {
+export declare module UseStream {
 
   type Model = {
     [key:string]: Stream<any>;
@@ -7,7 +7,8 @@ export namespace UseStream {
 
   type ModelFn = (_?:any) => Model
 
-  export type useStream = ({ model, onMount, onDestroy, defer } : {
+  type useStream = ({ model, onMount, onDestroy, defer } : {
+
     /**
      * The model is a POJO object with (optionally multiple) streams.
      * `useStream` returns this model once it is initialized.
@@ -106,6 +107,6 @@ export namespace UseStream {
      * 
      */
     defer?: boolean;
-  }) => Model;
 
+  }) => Model;
 }
