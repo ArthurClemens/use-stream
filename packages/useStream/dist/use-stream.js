@@ -4,7 +4,8 @@ const useStream = ({ defer, model, onMount, onDestroy }) => {
     // Memoized model
     const [memo, setMemo] = useState(!defer
         ? typeof model === "function" ? model() : model
-        : null);
+        : null // deferred
+    );
     // Local storage that connects stream updates to React renders
     const [streamValues, setStreamValues] = useState({});
     useEffect(() => {
@@ -17,26 +18,26 @@ const useStream = ({ defer, model, onMount, onDestroy }) => {
             setMemo(localMemo);
         }
         // Subscribe to stream changes: updates are written to streamValues
-        Object.keys(localMemo).forEach((key) => {
-            const stream = localMemo[key];
-            // Don't map over items that are not streams
-            if (!stream.map || typeof stream !== "function") {
-                return;
-            }
-            stream.map((value) => setStreamValues({
-                ...streamValues,
-                [key]: value
-            }));
-        });
+        if (localMemo) {
+            Object.keys(localMemo).forEach((key) => {
+                const stream = localMemo[key];
+                if (stream.map && typeof stream.map === "function") {
+                    stream.map((value) => setStreamValues({
+                        ...streamValues,
+                        [key]: value
+                    }));
+                }
+            });
+        }
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    // mount and unmount
     useEffect(() => {
-        const memoValue = memo;
-        if (onMount) {
-            onMount(memoValue);
+        if (memo !== null && onMount) {
+            onMount(memo);
         }
         return () => {
-            if (onDestroy) {
-                onDestroy(memoValue);
+            if (memo !== null && onDestroy) {
+                onDestroy(memo);
             }
         };
     }, []); // eslint-disable-line react-hooks/exhaustive-deps

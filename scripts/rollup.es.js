@@ -8,7 +8,7 @@ const targetConfig = Object.assign({}, baseConfig, {
     baseConfig.output,
     {
       format: "es",
-      file: `${env.DEST || pkg.main}.mjs`,
+      file: `${env.DEST || pkg.main}.js`,
     }
   )
 });

@@ -262,4 +262,4 @@ defer?: boolean;
 
 ## Size
 
-430 bytes gzipped
+437 bytes gzipped

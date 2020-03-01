@@ -27,7 +27,7 @@ external.forEach(ext => {
 
 export const createConfig = () => {
   const config = {
-    input: env.ENTRY || "src/index.ts",
+    input: env.ENTRY || "lib/index.ts",
     external,
     output: {
       name,

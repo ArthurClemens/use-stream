@@ -13,11 +13,11 @@ const format = isModule
   ? "es"
   : "umd";
 const file = isModule
-  ? `${process.env.DEST || pkg.main}.mjs`
+  ? `${process.env.DEST || pkg.main}.js`
   : `${process.env.DEST || pkg.main}.js`;
 
 export default {
-  input: env.ENTRY || "src/index.ts",
+  input: env.ENTRY || "lib/index.ts",
   output: {
     sourcemap: true,
     format,

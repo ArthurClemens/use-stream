@@ -1,24 +1,6 @@
 {
   "name": "use-stream",
-  "version": "0.2.3",
-  "description": "React Hook for working with streams.",
-  "main": "dist/use-stream",
-  "module": "dist/use-stream.mjs",
-  "scripts": {
-    "clean": "rm -rf dist/*",
-    "rollup": "MODULE_NAME=useStream TYPESCRIPT=1 ./node_modules/rollup/dist/bin/rollup -c ./scripts/rollup.umd.js && TYPESCRIPT=1 ./node_modules/rollup/dist/bin/rollup -c ./scripts/rollup.es.js ",
-    "build": "npm run clean && npm run rollup && npm run size",
-    "test": "react-scripts test --env=jsdom",
-    "size": "gzip -c dist/use-stream.js | wc -c"
-  },
-  "files": [
-    "dist",
-    "index.d.ts",
-    "README.md"
-  ],
-  "author": "Arthur Clemens <arthurclemens@gmail.com> (http://visiblearea.com)",
-  "homepage": "https://github.com/ArthurClemens/use-stream",
-  "license": "MIT",
+  "private": true,
   "devDependencies": {
     "@babel/cli": "^7.8.4",
     "@babel/core": "^7.8.6",
@@ -31,6 +13,7 @@
     "@types/mithril": "^2.0.2",
     "@types/react": "^16.9.23",
     "babel-core": "^7.0.0-bridge.0",
+    "lerna": "^3.19.0",
     "react-scripts": "3.4.0",
     "rollup": "^1.32.0",
     "rollup-plugin-babel": "^4.3.3",
@@ -39,8 +22,5 @@
     "rollup-plugin-terser": "^5.2.0",
     "rollup-plugin-typescript2": "^0.26.0",
     "typescript": "^3.8.3"
-  },
-  "peerDependencies": {
-    "react": "^16.13.0"
   }
 }
