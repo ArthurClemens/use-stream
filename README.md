@@ -9,6 +9,7 @@ A React Hook for working with streams inside function components.
 - [API](#api)
   - [Parameters](#parameters)
     - [`model`](#model)
+      - [Using TypeScript](#using-typescript)
     - [`onMount`](#onmount)
     - [`onDestroy`](#ondestroy)
     - [`defer`](#defer)
@@ -67,7 +68,7 @@ const App = () => {
 Code examples on CodeSandbox:
 
 * [Simple counter](https://codesandbox.io/s/usestream-simple-counter-futo1)
-  * [The same simple counter with Flyd](https://codesandbox.io/s/usestream-simple-counter-with-flyd-85hw6)
+* [Simple counter with Flyd (TypeScript)](https://codesandbox.io/s/usestream-simple-counter-with-flyd-85hw6)
 * [James Forbes' useInterval](https://codesandbox.io/s/usestream-with-useinterval-hi9od)
 * [Meisois pattern for a counter](https://codesandbox.io/s/usestream-meiosis-pattern-fsu7e)
 * [Flyd example: simple sum](https://codesandbox.io/s/usestream-flyd-example-sum-0hw32)
@@ -98,8 +99,21 @@ import { stream } from "flyd";
 
 ## API
 
+```js
+useStream({ model, onMount, onDestroy, defer })
+```
+
+Type definition:
+
 ```ts
-useStream({ model, onMount?, onDestroy?, defer? }) => model
+useStream<TGenModel>({ model, onMount, onDestroy, defer } : {
+  model: IGenModel,
+  onMount?: (model: IModel) => any,
+  onDestroy?: (model: IModel) => any,
+  defer?: boolean
+}): IModel
+
+type IGenModel<IModel> = IModel | (() => IModel)
 ```
 
 ### Parameters
@@ -153,16 +167,40 @@ const { index, count } = useStream({
 })
 ```
 
+##### Using TypeScript
+
+```ts
+import flyd from "flyd";
+
+interface IModel {
+  count: flyd.Stream<number>;
+}
+
+const { count } = useStream<IModel>({
+  model: {
+    count: flyd.stream(0)
+  }
+});
+
+// When using a function:
+
+const { count } = useStream<IModel>({
+  model: () => ({
+    count: flyd.stream(0)
+  })
+});
+
+// count is now:
+// const count: flyd.Stream<number>
+```
+
+
 Type definition:
 
 ```ts
-model: Model | ModelFn;
+model: IGenModel
 
-type Model = {
-  [key:string]: Stream<any>;
-}
-
-type ModelFn = (_?:any) => Model
+type IGenModel<IModel> = IModel | (() => IModel)
 ```
 
 #### `onMount`
@@ -178,7 +216,7 @@ onMount: (model) => {
 Type definition:
 
 ```ts
-onMount?: (model: Model) => any;
+onMount?: (model: IModel) => any
 ```
 
 #### `onDestroy`
@@ -194,7 +232,7 @@ onDestroy: (model) => {
 Type definition:
 
 ```ts
-onDestroy?: (model: Model) => any;
+onDestroy?: (model: IModel) => any
 ```
 
 #### `defer`
@@ -256,7 +294,7 @@ const { index } = model
 Type definition:
 
 ```ts
-defer?: boolean;
+defer?: boolean
 ```
 
 

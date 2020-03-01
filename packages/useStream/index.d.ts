@@ -3,11 +3,11 @@
 
 export as namespace useStream;
 
-export function useStream<TModel>(props: UseStreamProps<TModel>): TModel;
+export function useStream<IModel>(props: UseStreamProps<IModel>): IModel;
 
-type TGenModel<TModel> = TModel | (() => TModel);
+type IGenModel<IModel> = IModel | (() => IModel)
 
-type UseStreamProps<TModel> = {
+type UseStreamProps<IModel> = {
 
   /**
    * The model is a POJO object with (optionally multiple) streams.
@@ -42,18 +42,18 @@ type UseStreamProps<TModel> = {
    *   }
    * })
    */
-  model: TGenModel;
+  model: IGenModel;
 
   /**
    * Callback method to run side effects when the containing component is mounted.
    */
-  onMount?: (model: TModel) => any;
+  onMount?: (model: IModel) => any;
 
   /**
    * Callback method to clean up side effects. onDestroy is called
    * when the containing component goes out of scope.
    */
-  onDestroy?: (model: TModel) => any;
+  onDestroy?: (model: IModel) => any;
 
   /**
    * Optimization to prevent that stream initialization functions are ran at each render.
@@ -108,4 +108,4 @@ type UseStreamProps<TModel> = {
    */
   defer?: boolean;
 
-};
+}

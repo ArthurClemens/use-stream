@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import * as UseStream from "../index";
 
-export const useStream = <TGenModel>({ defer, model, onMount, onDestroy }: UseStream.UseStreamProps<TGenModel> ) => {
+export const useStream = <TGenModel>({ defer, model, onMount, onDestroy } : UseStream.UseStreamProps<TGenModel>) => {
   // Memoized model
   const [memo, setMemo] = useState<TGenModel | null>(!defer
     ? typeof model === "function" ? model() : model
