@@ -172,11 +172,11 @@ const { index, count } = useStream({
 ```ts
 import flyd from "flyd";
 
-interface IModel {
+type TModel = {
   count: flyd.Stream<number>;
 }
 
-const { count } = useStream<IModel>({
+const { count } = useStream<TModel>({
   model: {
     count: flyd.stream(0)
   }
@@ -184,7 +184,7 @@ const { count } = useStream<IModel>({
 
 // When using a function:
 
-const { count } = useStream<IModel>({
+const { count } = useStream<TModel>({
   model: () => ({
     count: flyd.stream(0)
   })

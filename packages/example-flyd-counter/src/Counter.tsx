@@ -9,12 +9,12 @@ type TCounter = {
   count: number;
 };
 
-interface IModel {
+type TModel = {
   count: flyd.Stream<number>;
 }
 
 export const Counter: FunctionComponent<TCounter> = props => {
-  const { count } = useStream<IModel>({
+  const { count } = useStream<TModel>({
     model: {
       count: flyd.stream(props.count)
     }
