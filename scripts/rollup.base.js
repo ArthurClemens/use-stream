@@ -7,22 +7,19 @@ import typescript from "rollup-plugin-typescript2";
 
 const env = process.env;
 export const pkg = JSON.parse(fs.readFileSync("./package.json"));
-const external = Object.keys(pkg.devDependencies || {});
+const external = Object.keys({
+  ...pkg.devDependencies,
+  ...pkg.peerDependencies
+});
 const name = env.MODULE_NAME;
 const isTypeScript = !!process.env.TYPESCRIPT;
 
 const globals = {};
+globals["mithril"] = "m";
+globals["react"] = "React";
+
 external.forEach(ext => {
-  switch (ext) {
-  case "mithril":
-    globals["mithril"] = "m";
-    break;
-  case "react":
-      globals["react"] = "React";
-      break;
-  default:
-    globals[ext] = ext;
-  }
+  globals[ext] = ext;
 });
 
 export const createConfig = () => {
@@ -34,7 +31,6 @@ export const createConfig = () => {
       globals,
     },
     plugins: [
-      
       
       resolve({ browser: true }),
 
