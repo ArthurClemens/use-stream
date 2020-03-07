@@ -16,7 +16,7 @@ const targetConfig = Object.assign({}, baseConfig, {
       name,
       format: "umd",
       file: `${env.DEST || pkg.main}.min.js`,
-      sourcemap: true,
+      sourcemap: false,
     }
   )
 });
