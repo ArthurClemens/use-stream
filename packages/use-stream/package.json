@@ -1,15 +1,20 @@
 {
   "name": "use-stream",
-  "version": "0.2.4",
+  "version": "0.3.0",
   "description": "React Hook for working with streams.",
   "main": "dist/use-stream",
-  "module": "dist/use-stream.mjs",
+  "module": "dist/use-stream.js",
   "scripts": {
     "clean": "rm -rf dist/*",
-    "rollup": "MODULE_NAME=useStream TYPESCRIPT=1 ../../node_modules/rollup/dist/bin/rollup -c ../../scripts/rollup.umd.js && TYPESCRIPT=1 ../../node_modules/rollup/dist/bin/rollup -c ../../scripts/rollup.es.js ",
+    "rollup": "MODULE_NAME=useStream TYPESCRIPT=1 ../../node_modules/rollup/dist/bin/rollup -c ../../scripts/rollup.umd.js && TYPESCRIPT=1 ../../node_modules/rollup/dist/bin/rollup -c ../../scripts/rollup.es.js",
     "build": "npm run clean && npm run rollup && npm run size",
+    "typecheck": "../../node_modules/typescript/bin/tsc --p tsconfig.json",
     "test": "react-scripts test --env=jsdom",
-    "size": "gzip -c dist/use-stream.min.js | wc -c"
+    "size": "gzip -c dist/use-stream.min.js | wc -c",
+    "postbuild": "rm dist/use-stream.min.js"
+  },
+  "devDependencies": {
+    "@types/debug": "4.1.5"
   },
   "files": [
     "dist",

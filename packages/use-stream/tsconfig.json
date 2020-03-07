@@ -1,10 +1,10 @@
 {
   "include": [
-    "src/**/*",
+    "lib/*",
     "index.d.ts"
   ],
   "exclude": [
-    "node_modules/*"
+    "node_modules"
   ],
   "compilerOptions": {
     "target": "ESNEXT",
@@ -12,7 +12,6 @@
     "strict": true,
     "noUnusedLocals": true,
     "moduleResolution": "node",
-    "types": [],
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "lib": [
@@ -22,6 +21,7 @@
     ],
     "allowJs": true,
     "skipLibCheck": true,
+    "types": [], // to disable automatic inclusion of @types packages
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
