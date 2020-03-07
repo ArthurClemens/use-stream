@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 
-const useStream = ({ model, onMount, onDestroy, onUpdate, deps = [], debug, }) => {
+const useStream = ({ model, onMount, onDestroy, onUpdate, deps = [], defer, debug, }) => {
     // Local storage that connects stream updates to React renders:
     const [streamValues, setStreamValues] = useState({});
     // Distinguish update from mount:
@@ -26,14 +26,14 @@ const useStream = ({ model, onMount, onDestroy, onUpdate, deps = [], debug, }) =
             .filter(Boolean);
     };
     const unsubscribe = () => {
-        if (subsRef.current) {
+        if (subsRef.current.length) {
             debug && debug("Unsubscribe");
             subsRef.current.forEach((s) => s.end(true));
             subsRef.current = [];
         }
     };
-    const memoGen = () => {
-        debug && debug("memoGen");
+    const createMemo = () => {
+        debug && debug("createMemo");
         unsubscribe();
         const modelFn = typeof model === "function"
             ? model
@@ -42,7 +42,7 @@ const useStream = ({ model, onMount, onDestroy, onUpdate, deps = [], debug, }) =
         subscribe(memo);
         return memo;
     };
-    const [memo, setMemo] = useState(memoGen);
+    const [memo, setMemo] = useState(defer ? null : createMemo);
     // Update
     useEffect(() => {
         if (!isInitedRef.current) {
@@ -50,7 +50,7 @@ const useStream = ({ model, onMount, onDestroy, onUpdate, deps = [], debug, }) =
         }
         debug && debug("Updating");
         if (onUpdate) {
-            const localMemo = memoGen();
+            const localMemo = createMemo();
             setMemo(localMemo);
             onUpdate(localMemo);
         }
@@ -58,8 +58,13 @@ const useStream = ({ model, onMount, onDestroy, onUpdate, deps = [], debug, }) =
     // Mount and unmount
     useEffect(() => {
         debug && debug("Mounting");
-        if (memo !== null && onMount) {
-            onMount(memo);
+        let localMemo = memo;
+        if (defer) {
+            localMemo = createMemo();
+            setMemo(localMemo);
+        }
+        if (onMount && localMemo) {
+            onMount(localMemo);
         }
         isInitedRef.current = true;
         return () => {

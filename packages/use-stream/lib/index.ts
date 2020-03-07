@@ -7,6 +7,7 @@ export const useStream = <TModel>({
   onDestroy,
   onUpdate,
   deps = [],
+  defer,
   debug,
 } : UseStream.UseStreamProps<TModel & UseStream.IModel>) => {
     
@@ -39,15 +40,15 @@ export const useStream = <TModel>({
   };
 
   const unsubscribe = () => {
-    if (subsRef.current) {
+    if (subsRef.current.length) {
       debug && debug("Unsubscribe");
       subsRef.current.forEach((s: UseStream.TStream) => s.end(true));
       subsRef.current = [];
     }
   };
 
-  const memoGen: () => TModel = () => {
-    debug && debug("memoGen");
+  const createMemo: () => TModel = () => {
+    debug && debug("createMemo");
     unsubscribe();
     const modelFn: UseStream.TModelFn<TModel> =
       typeof model === "function"
@@ -58,7 +59,7 @@ export const useStream = <TModel>({
     return memo;
   };
 
-  const [memo, setMemo] = useState(memoGen);
+  const [memo, setMemo] = useState(defer ? null : createMemo);
 
   // Update
   useEffect(() => {
@@ -67,7 +68,7 @@ export const useStream = <TModel>({
     }
     debug && debug("Updating");
     if (onUpdate) {
-      const localMemo = memoGen();
+      const localMemo = createMemo();
       setMemo(localMemo);
       onUpdate(localMemo);
     }
@@ -76,10 +77,17 @@ export const useStream = <TModel>({
   // Mount and unmount
   useEffect(() => {
     debug && debug("Mounting");
-    if (memo !== null && onMount) {
-      onMount(memo);
+
+    let localMemo = memo;
+    if (defer) {
+      localMemo = createMemo();
+      setMemo(localMemo);
+    }
+    if (onMount && localMemo) {
+      onMount(localMemo);
     }
     isInitedRef.current = true;
+
     return () => {
       debug && debug("Unmounting");
       unsubscribe();

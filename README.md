@@ -12,7 +12,10 @@ A React Hook for working with streams inside function components.
 - [API](#api)
   - [`model`](#model)
     - [Optimizing the model instantiation](#optimizing-the-model-instantiation)
+      - [Model function](#model-function)
+      - [Deferring instantiation](#deferring-instantiation)
     - [Using TypeScript](#using-typescript)
+  - [`defer`](#defer)
   - [`deps`](#deps)
   - [`onMount`](#onmount)
   - [`onUpdate`](#onupdate)
@@ -114,6 +117,7 @@ Type definition:
 ```ts
 useStream<TModel>({ model, deps, onMount, onUpdate, onDestroy, debug } : {
   model: TModelGen<TModel>,
+  defer?: boolean;
   deps?: React.DependencyList;
   onMount?: (model: TModel) => any,
   onUpdate?: (model: TModel) => any,
@@ -146,6 +150,8 @@ const { index, count } = useStream({
 
 #### Optimizing the model instantiation
 
+##### Model function
+
 With a POJO object the model streams will be called at each render. While this does't mean that streams are reset at each call (because their results are memoized), some overhead may occur, and you need to be careful if you are causing side effects.
 
 The optimization is to pass a function that returns the model object. This approach also gives more flexibility, for instance to connect model streams before passing the model.
@@ -166,6 +172,11 @@ const { index, count } = useStream({
   }
 })
 ```
+
+##### Deferring instantiation
+
+One further optimization is to defer the initialization to the first render. See [defer](#defer) below for elaboration.
+
 
 #### Using TypeScript
 
@@ -202,6 +213,39 @@ model: TModelGen<TModel>
 
 type TModelGen<TModel> = TModel | TModelFn<TModel>
 type TModelFn<TModel> = (_?: any) => TModel
+```
+
+
+### `defer`
+
+Postpones the model initialization until after the first render (in `React.useEffect`). This also prevents that the initialization is called more than once. 
+
+The result of postponing to after the first render is that the model will not be available immediately. This can be handled with a conditional.
+
+Example:
+
+```js
+const model = useStream({
+  model: () => ({ // first optimization: model function
+    index: stream(0),
+    count: stream(3)
+  }),
+  defer: true, // second optimization
+})
+
+if (!model) {
+  // first render
+  return null
+}
+
+const { index, count } = model
+```
+
+
+Type definition:
+
+```ts
+defer?: boolean
 ```
 
 
@@ -304,4 +348,4 @@ debug?: Debug.Debugger
 
 Approximation of module size when transpiled and minimized:
 
-573 bytes gzipped
+604 bytes gzipped

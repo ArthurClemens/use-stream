@@ -53,7 +53,7 @@ type TCounter = {
 
 const Counter: FunctionComponent<TCounter> = props => {
   debug("Render Counter");
-  const { count, delay } = useStream<TModel>({
+  const model = useStream<TModel>({
     model: () => {
       debug("Init model");
       const delay = flyd.stream(props.initDelay);
@@ -64,6 +64,7 @@ const Counter: FunctionComponent<TCounter> = props => {
         count
       };
     },
+    defer: true,
     deps: [props.initCount],
     onMount: ({ count, delay }) => {
       debug("onMount");
@@ -82,6 +83,11 @@ const Counter: FunctionComponent<TCounter> = props => {
     },
     debug: debugLib,
   });
+
+  if (!model) {
+    return null;
+  }
+  const { count, delay } = model;
 
   return (
     <div className="ui segment form demo-section">

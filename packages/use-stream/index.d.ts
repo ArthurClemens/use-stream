@@ -46,6 +46,7 @@ export namespace UseStream {
      *     const index = stream(0)
      *     const count = stream(3)
      *     count.map(console.log) // another stream that is subscribed to the count stream
+     * 
      *     return {
      *       index,
      *       count
@@ -75,6 +76,11 @@ export namespace UseStream {
      * React hooks deps array. Default [].
      */
     deps?: React.DependencyList;
+    
+    /**
+     * Defers initialization of the model to the mount useEffect.
+     */
+    defer?: boolean;
 
     /**
      * Debugger instance.
