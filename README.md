@@ -6,13 +6,18 @@ A React Hook for working with streams inside function components.
 - [Example](#example)
 - [Live examples](#live-examples)
 - [Usage](#usage)
+  - [Stream libraries](#stream-libraries)
+  - [Mithril Stream](#mithril-stream)
+  - [Flyd](#flyd)
 - [API](#api)
-  - [Parameters](#parameters)
-    - [`model`](#model)
-      - [Using TypeScript](#using-typescript)
-    - [`onMount`](#onmount)
-    - [`onDestroy`](#ondestroy)
-    - [`defer`](#defer)
+  - [`model`](#model)
+    - [Optimizing the model instantiation](#optimizing-the-model-instantiation)
+    - [Using TypeScript](#using-typescript)
+  - [`deps`](#deps)
+  - [`onMount`](#onmount)
+  - [`onUpdate`](#onupdate)
+  - [`onDestroy`](#ondestroy)
+  - [`debug`](#debug)
 - [Size](#size)
 
 
@@ -24,7 +29,7 @@ A React Hook for working with streams inside function components.
 The downside: streams do not fit neatly within React's component rendering.
 
 * Function components are ran each render, so any state is either lost or re-initialized, except when using Redux or Hooks.
-* When a stream gets updated, the component does not get the message, so no new state is rendered.
+* Stream state is disconnected from component state, so when a stream gets updated no new state is rendered.
 
 This is where `useStream` comes in:
 
@@ -79,66 +84,57 @@ Code examples on CodeSandbox:
 
 `npm install use-stream`
 
-You can use any stream library. In the examples below we'll use the lightweight stream module from Mithril, which comes separate from Mithril core code.
+### Stream libraries
 
-`npm install mithril`
+You can use any stream library. The only prerequisite is that the stream has a `map` method.
 
-```js
-import stream from "mithril/stream";
-```
+### Mithril Stream
 
-or use another stream library like [Flyd](https://github.com/paldepind/flyd):
+In some examples below we'll use the lightweight stream module from Mithril, which comes separate from Mithril core code.
 
-`npm install flyd`
+[Mithril Stream documentation](https://mithril.js.org/stream.html)
 
-```js
-import { stream } from "flyd";
-```
 
+### Flyd
+
+More full fledged stream library, but still quite small.
+
+[Flyd documentation](https://github.com/paldepind/flyd)
 
 
 ## API
 
 ```js
-useStream({ model, onMount, onDestroy, defer })
+useStream({ model })
+useStream({ model, deps, onMount, onUpdate, onDestroy, debug })
 ```
 
 Type definition:
 
 ```ts
-useStream<TGenModel>({ model, onMount, onDestroy, defer } : {
-  model: IGenModel,
-  onMount?: (model: IModel) => any,
-  onDestroy?: (model: IModel) => any,
-  defer?: boolean
-}): IModel
+useStream<TModel>({ model, deps, onMount, onUpdate, onDestroy, debug } : {
+  model: TModelGen<TModel>,
+  deps?: React.DependencyList;
+  onMount?: (model: TModel) => any,
+  onUpdate?: (model: TModel) => any,
+  onDestroy?: (model: TModel) => any,
+  debug?: Debug.Debugger
+}): TModel
 
-type IGenModel<IModel> = IModel | (() => IModel)
+type TModelGen<TModel> = TModel | TModelFn<TModel>
+type TModelFn<TModel> = (_?: any) => TModel
 ```
 
-### Parameters
 
-#### `model`
+### `model`
 
 The model is a POJO object with (optionally multiple) streams.
 `useStream` returns this model once it is initialized.
+
+Note that the model streams will be called at each render. See [Optimizing the model instantiation](#optimizing-the-model-instantiation) below.
  
 Example:
  
-```js
-const model = useStream({
-  model: {
-    index: stream(0),
-    count: stream(3)
-  }
-})
- 
-const { index, count } = model
-const countValue = count()
-```
-
-Or shorter:
-
 ```js
 const { index, count } = useStream({
   model: {
@@ -147,9 +143,12 @@ const { index, count } = useStream({
   }
 })
 ```
- 
-For more flexibility, pass a function that returns the model object. See also `defer` 
-how to combine this for optimization.
+
+#### Optimizing the model instantiation
+
+With a POJO object the model streams will be called at each render. While this does't mean that streams are reset at each call (because their results are memoized), some overhead may occur, and you need to be careful if you are causing side effects.
+
+The optimization is to pass a function that returns the model object. This approach also gives more flexibility, for instance to connect model streams before passing the model.
  
 Example:
  
@@ -159,6 +158,7 @@ const { index, count } = useStream({
     const index = stream(0)
     const count = stream(3)
     count.map(console.log) // another stream that is subscribed to the count stream
+
     return {
       index,
       count
@@ -167,7 +167,7 @@ const { index, count } = useStream({
 })
 ```
 
-##### Using TypeScript
+#### Using TypeScript
 
 ```ts
 import flyd from "flyd";
@@ -182,7 +182,7 @@ const { count } = useStream<TModel>({
   }
 });
 
-// When using a function:
+// When using a model function:
 
 const { count } = useStream<TModel>({
   model: () => ({
@@ -198,106 +198,110 @@ const { count } = useStream<TModel>({
 Type definition:
 
 ```ts
-model: IGenModel
+model: TModelGen<TModel>
 
-type IGenModel<IModel> = IModel | (() => IModel)
+type TModelGen<TModel> = TModel | TModelFn<TModel>
+type TModelFn<TModel> = (_?: any) => TModel
 ```
 
-#### `onMount`
+
+### `deps`
+
+React hooks deps array. Default `[]`.
+
+```js
+deps: [props.initCount]
+```
+
+Type definition:
+
+```ts
+deps?: React.DependencyList
+```
+
+
+### `onMount`
 
 Callback method to run side effects when the containing component is mounted.
 
 ```js
 onMount: (model) => {
-  // any side effects
+  // Handle any side effects.
 }
 ```
 
 Type definition:
 
 ```ts
-onMount?: (model: IModel) => any
+onMount?: (model: TModel) => any
 ```
 
-#### `onDestroy`
+
+### `onUpdate`
+
+When using `deps`. Callback method to run side effects when the containing component is updated through `deps`.
+
+```js
+deps: [props.initCount],
+onUpdate: (model) => {
+  // Called when `initCount` is changed. Handle any side effects.
+}
+```
+
+Type definition:
+
+```ts
+onUpdate?: (model: TModel) => any
+```
+
+
+### `onDestroy`
 
 Callback method to clean up side effects. `onDestroy` is called when the containing component goes out of scope.
 
 ```js
 onDestroy: (model) => {
-  // cleanup
+  // Cleanup of any side effects.
 }
 ```
 
 Type definition:
 
 ```ts
-onDestroy?: (model: IModel) => any
+onDestroy?: (model: TModel) => any
 ```
 
-#### `defer`
 
-Optimization to prevent that stream initialization functions are ran at each render.
-The default behavior does not mean that streams are reset (as their results are memoized),
-but this optimization may prevent problems when model streams involve calling side effects.
+### `debug`
 
-Technically, `defer` will postpone the initialization functions until after the first
-render (in `React.useEffect`). That means that in the first render the model will not be
-available yet.
+Debugger instance. See: https://www.npmjs.com/package/debug
+
+Provides feedback on the lifecycle of the model instance and stream subscriptions.
 
 Example:
 
 ```js
-const model = useStream({
-  defer: true,
-  model: {
-    index: stream(0),
-    count: stream(3)
-  }
-})
+import Debug from "debug";
 
-if (!model) {
-  // first render
-  return null
-}
-
-const { index, count } = model
-```
-
-When the model is created by a factory function, you should combine this optimization with
-the "pass a function that returns the model" approach (see: model).
-
-Example:
-
-```js
-const createModel = ({ defaultIndex = 0 }) => {
-  const index = stream(defaultIndex)
-  // Possibly creates other streams and methods on streams...
-
-  return {
-    index
-  }
-}
+const debugUseStream = Debug("use-stream");
+debugUseStream.enabled = true;
+debugUseStream.log = console.log.bind(console);
 
 const model = useStream({
-  defer: true,
-  model: createModel({ defaultIndex: 1 })
-})
+  model: ...,
+  debug: debugUseStream,
+});
 
-if (!model) {
-  return null
-}
-
-const { index } = model
 ```
 
 Type definition:
 
 ```ts
-defer?: boolean
+debug?: Debug.Debugger
 ```
-
 
 ## Size
 
-437 bytes gzipped
+Approximation of module size when transpiled and minimized:
+
+573 bytes gzipped
