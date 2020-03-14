@@ -1,26 +1,24 @@
 /*
 Build to an Universal Module Definition
 */
-import { pkg, createConfig } from "./rollup.base";
-import { terser } from "rollup-plugin-terser";
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { terser } from 'rollup-plugin-terser';
+import { pkg, createConfig } from './rollup.base';
 
-const env = process.env;
-const name = env.MODULE_NAME || "useStream";
-  
+const { env } = process;
+const name = env.MODULE_NAME || 'useStream';
+
 const baseConfig = createConfig();
-const targetConfig = Object.assign({}, baseConfig, {
-  output: Object.assign(
-    {},
-    baseConfig.output,
-    {
-      name,
-      format: "umd",
-      file: `${env.DEST || pkg.main}.min.js`,
-      sourcemap: false,
-    }
-  )
-});
+const targetConfig = {
+  ...baseConfig,
+  output: {
+    ...baseConfig.output,
+    name,
+    format: 'umd',
+    file: `${env.DEST || pkg.main}.min.js`,
+    sourcemap: false,
+  },
+};
 targetConfig.plugins.push(terser());
 
 export default targetConfig;
-

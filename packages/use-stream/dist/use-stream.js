@@ -1,23 +1,28 @@
-import { useState, useRef, useEffect } from 'react';
+import React from 'react';
 
+// eslint-disable-next-line import/no-unresolved
 const useStream = ({ model, onMount, onDestroy, onUpdate, deps = [], defer, debug, }) => {
     // Local storage that connects stream updates to React renders:
-    const [streamValues, setStreamValues] = useState({});
+    const [streamValues, setStreamValues] = React.useState({});
     // Distinguish update from mount:
-    const isInitedRef = useRef(false);
+    const isInitedRef = React.useRef(false);
     // Keep reference of all streams that update streamValues so they can be stopped:
-    const subsRef = useRef([]);
+    const subsRef = React.useRef([]);
     const subscribe = (memo) => {
-        debug && debug("Subscribe");
+        if (debug) {
+            debug('Subscribe');
+        }
         subsRef.current = Object.keys(memo)
             .map((key) => {
             const stream = memo[key];
-            return stream.map && typeof stream.map === "function"
+            return stream.map && typeof stream.map === 'function'
                 ? stream.map((value) => {
-                    debug && debug("Will update %s", key);
+                    if (debug) {
+                        debug('Will update %s', key);
+                    }
                     setStreamValues({
                         ...streamValues,
-                        [key]: value
+                        [key]: value,
                     });
                     return null;
                 })
@@ -27,28 +32,34 @@ const useStream = ({ model, onMount, onDestroy, onUpdate, deps = [], defer, debu
     };
     const unsubscribe = () => {
         if (subsRef.current.length) {
-            debug && debug("Unsubscribe");
+            if (debug) {
+                debug('Unsubscribe');
+            }
             subsRef.current.forEach((s) => s.end(true));
             subsRef.current = [];
         }
     };
     const createMemo = () => {
-        debug && debug("createMemo");
+        if (debug) {
+            debug('createMemo');
+        }
         unsubscribe();
-        const modelFn = typeof model === "function"
+        const modelFn = typeof model === 'function'
             ? model
             : (() => model);
         const memo = modelFn();
         subscribe(memo);
         return memo;
     };
-    const [memo, setMemo] = useState(defer ? null : createMemo);
+    const [memo, setMemo] = React.useState(defer ? null : createMemo);
     // Update
-    useEffect(() => {
+    React.useEffect(() => {
         if (!isInitedRef.current) {
             return;
         }
-        debug && debug("Updating");
+        if (debug) {
+            debug('Updating');
+        }
         if (onUpdate) {
             const localMemo = createMemo();
             setMemo(localMemo);
@@ -56,8 +67,10 @@ const useStream = ({ model, onMount, onDestroy, onUpdate, deps = [], defer, debu
         }
     }, deps); // eslint-disable-line react-hooks/exhaustive-deps
     // Mount and unmount
-    useEffect(() => {
-        debug && debug("Mounting");
+    React.useEffect(() => {
+        if (debug) {
+            debug('Mounting');
+        }
         let localMemo = memo;
         if (defer) {
             localMemo = createMemo();
@@ -68,7 +81,9 @@ const useStream = ({ model, onMount, onDestroy, onUpdate, deps = [], defer, debu
         }
         isInitedRef.current = true;
         return () => {
-            debug && debug("Unmounting");
+            if (debug) {
+                debug('Unmounting');
+            }
             unsubscribe();
             if (memo !== null && onDestroy) {
                 onDestroy(memo);

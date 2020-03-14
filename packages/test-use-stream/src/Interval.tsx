@@ -1,18 +1,21 @@
-import React, { useState, FunctionComponent } from "react";
-import { useStream } from "use-stream";
-import flyd from "flyd";
-import Debug from "debug";
+import React, { useState, FunctionComponent } from 'react';
+import { useStream } from 'use-stream';
+import flyd from 'flyd';
+import Debug from 'debug';
 
-const debug = Debug("test-use-stream:interval");
+const debug = Debug('test-use-stream:interval');
 debug.enabled = true;
+// eslint-disable-next-line no-console
 debug.log = console.log.bind(console);
 
-const debugInterval = Debug("test-use-stream:interval-fn");
+const debugInterval = Debug('test-use-stream:interval-fn');
 debugInterval.enabled = true;
+// eslint-disable-next-line no-console
 debugInterval.log = console.log.bind(console);
 
-const debugLib = Debug("test-use-stream:lib");
+const debugLib = Debug('test-use-stream:lib');
 debugLib.enabled = true;
+// eslint-disable-next-line no-console
 debugLib.log = console.log.bind(console);
 
 // Code comments at https://james-forbes.com/#!/posts/hooks-and-streams
@@ -20,17 +23,17 @@ const interval = ({ delay }: { delay: flyd.Stream<number> }) => {
   const id: flyd.Stream<number> = flyd.stream();
   const tick: flyd.Stream<number> = flyd.stream();
 
-  delay.map(delay => {
-    debugInterval("New delay");
+  delay.map((delayValue: number) => {
+    debugInterval('New delay');
     debugInterval("Clear interval '%s'", id());
     clearInterval(id());
-    id(window.setInterval(tick, delay, delay));
+    id(window.setInterval(tick, delayValue, delay));
     debugInterval("Set new interval '%s'", id());
     return null;
   });
 
   delay.end.map(() => {
-    debugInterval("Delay end");
+    debugInterval('Delay end');
     debugInterval("Clear interval '%s'", id());
     clearInterval(id());
     return null;
@@ -51,34 +54,34 @@ type TCounter = {
   initDelay: number;
 };
 
-const Counter: FunctionComponent<TCounter> = props => {
-  debug("Render Counter");
+const Counter: FunctionComponent<TCounter> = (props: TCounter) => {
+  debug('Render Counter');
   const model = useStream<TModel>({
     model: () => {
-      debug("Init model");
+      debug('Init model');
       const delay = flyd.stream(props.initDelay);
       const count = flyd.stream(props.initCount);
 
       return {
         delay,
-        count
+        count,
       };
     },
     defer: true,
     deps: [props.initCount],
     onMount: ({ count, delay }) => {
-      debug("onMount");
+      debug('onMount');
       const tick = interval({ delay });
       tick.map(() => count(count() + 1));
     },
     onUpdate: ({ count, delay }) => {
-      debug("onUpdate");
+      debug('onUpdate');
       delay.end(); // Clean up side effects
       const tick = interval({ delay });
       tick.map(() => count(count() + 1));
     },
-    onDestroy: ({ delay, count }) => {
-      debug("onDestroy");
+    onDestroy: ({ delay }) => {
+      debug('onDestroy');
       delay.end(true); // Clean up side effects
     },
     debug: debugLib,
@@ -92,15 +95,17 @@ const Counter: FunctionComponent<TCounter> = props => {
   return (
     <div className="ui segment form demo-section">
       <h2 className="ui header">{count()}</h2>
-      <h3 className="ui header">Delay: {delay()} ms</h3>
+      <h3 className="ui header">{`Delay: ${delay()} ms`}</h3>
       <p>
         <button
+          type="button"
           className="ui button primary"
           onClick={() => delay(delay() + UNIT)}
         >
           Slower
         </button>
         <button
+          type="button"
           className="ui button primary"
           onClick={() => delay(delay() - UNIT)}
           disabled={delay() === UNIT}
@@ -124,6 +129,7 @@ export const IntervalPage = () => {
         useStream with side effects example: interval
       </div>
       <button
+        type="button"
         className="ui button small"
         onClick={() => {
           const showValue = !showCounter;
@@ -139,11 +145,12 @@ export const IntervalPage = () => {
       {showCounter ? (
         <>
           <button
+            type="button"
             className="ui button small"
             onClick={() =>
               setInitValues([
                 Math.round(Math.random() * 100),
-                100 + 100 * Math.round(Math.random() * 10)
+                100 + 100 * Math.round(Math.random() * 10),
               ])
             }
           >

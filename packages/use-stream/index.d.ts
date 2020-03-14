@@ -1,24 +1,26 @@
-import Debug from "debug";
+// eslint-disable-next-line import/no-extraneous-dependencies
+import Debug from 'debug';
+
+export function useStream<TModel>(
+  props: UseStream.UseStreamProps<TModel>,
+): TModel;
 
 export as namespace useStream;
 
-export function useStream<TModel>(props: UseStream.UseStreamProps<TModel>): TModel
-
 export namespace UseStream {
-
   type TStream = {
-    map: (_: any) => any;
-  } & any;
+    map<V>(project: (value: T) => V): Stream<V>;
+    end: Stream<boolean>;
+  } & unknown;
 
-  interface IModel {
+  interface Model {
     [key: string]: TStream;
   }
 
-  type TModelFn<TModel> = (_?: any) => TModel
+  type TModelFn<TModel extends Model> = (_?: unknown) => TModel;
 
-  type TModelGen<TModel> = TModel | TModelFn<TModel>
+  type TModelGen<TModel extends Model> = TModel | TModelFn<TModel>;
 
-  
   type UseStreamProps<TModel> = {
     /**
      * The model is a POJO object with (optionally multiple) streams.
@@ -46,7 +48,7 @@ export namespace UseStream {
      *     const index = stream(0)
      *     const count = stream(3)
      *     count.map(console.log) // another stream that is subscribed to the count stream
-     * 
+     *
      *     return {
      *       index,
      *       count
@@ -59,24 +61,24 @@ export namespace UseStream {
     /**
      * Callback method to run side effects when the containing component is mounted.
      */
-    onMount?: (model: TModel) => any;
+    onMount?: (model: TModel) => unknown;
 
     /**
      * Callback method to run side effects when the containing component is updated through deps.
      */
-    onUpdate?: (model: TModel) => any;
+    onUpdate?: (model: TModel) => unknown;
 
     /**
      * Callback method to clean up side effects. onDestroy is called
      * when the containing component goes out of scope.
      */
-    onDestroy?: (model: TModel) => any;
+    onDestroy?: (model: TModel) => unknown;
 
     /**
      * React hooks deps array. Default [].
      */
     deps?: React.DependencyList;
-    
+
     /**
      * Defers initialization of the model to the mount useEffect.
      */
@@ -87,7 +89,5 @@ export namespace UseStream {
      * See: https://www.npmjs.com/package/debug
      */
     debug?: Debug.Debugger;
-
-  }
+  };
 }
-

@@ -125,8 +125,18 @@ useStream<TModel>({ model, deps, onMount, onUpdate, onDestroy, debug } : {
   debug?: Debug.Debugger
 }): TModel
 
-type TModelGen<TModel> = TModel | TModelFn<TModel>
-type TModelFn<TModel> = (_?: any) => TModel
+type TStream = {
+  map<V>(project: (value: T) => V): Stream<V>;
+  end: Stream<boolean>;
+} & unknown;
+
+interface Model {
+  [key: string]: TStream;
+}
+
+type TModelFn<TModel extends Model> = (_?: unknown) => TModel;
+
+type TModelGen<TModel extends Model> = TModel | TModelFn<TModel>;
 ```
 
 
@@ -348,4 +358,4 @@ debug?: Debug.Debugger
 
 Approximation of module size when transpiled and minimized:
 
-604 bytes gzipped
+640 bytes gzipped

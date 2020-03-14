@@ -1,5 +1,6 @@
-import { useEffect, useState, useRef } from "react";
-import { UseStream } from "../index";
+// eslint-disable-next-line import/no-unresolved
+import React from 'react';
+import { UseStream } from '../index';
 
 export const useStream = <TModel>({
   model,
@@ -9,28 +10,37 @@ export const useStream = <TModel>({
   deps = [],
   defer,
   debug,
-} : UseStream.UseStreamProps<TModel & UseStream.IModel>) => {
-    
+}: UseStream.UseStreamProps<TModel>) => {
   // Local storage that connects stream updates to React renders:
-  const [streamValues, setStreamValues] = useState<{ [key: string]: any }>({});
+  const [streamValues, setStreamValues] = React.useState<{
+    [key: string]: unknown;
+  }>({});
 
   // Distinguish update from mount:
-  const isInitedRef = useRef(false);
-  
+  const isInitedRef = React.useRef(false);
+
   // Keep reference of all streams that update streamValues so they can be stopped:
-  const subsRef: React.MutableRefObject<UseStream.TStream[]> = useRef<UseStream.TStream[]>([]);
+  const subsRef: React.MutableRefObject<UseStream.TStream[]> = React.useRef<
+    UseStream.TStream[]
+  >([]);
 
   const subscribe = (memo: TModel) => {
-    debug && debug("Subscribe");
+    if (debug) {
+      debug('Subscribe');
+    }
     subsRef.current = Object.keys(memo)
       .map((key: string) => {
-        const stream: UseStream.TStream = (memo as TModel & UseStream.IModel)[key];
-        return stream.map && typeof stream.map === "function"
-          ? stream.map((value: any) => {
-              debug && debug("Will update %s", key);
+        const stream: UseStream.TStream = (memo as TModel & UseStream.Model)[
+          key
+        ];
+        return stream.map && typeof stream.map === 'function'
+          ? stream.map((value: unknown) => {
+              if (debug) {
+                debug('Will update %s', key);
+              }
               setStreamValues({
                 ...streamValues,
-                [key]: value
+                [key]: value,
               });
               return null;
             })
@@ -41,32 +51,38 @@ export const useStream = <TModel>({
 
   const unsubscribe = () => {
     if (subsRef.current.length) {
-      debug && debug("Unsubscribe");
+      if (debug) {
+        debug('Unsubscribe');
+      }
       subsRef.current.forEach((s: UseStream.TStream) => s.end(true));
       subsRef.current = [];
     }
   };
 
   const createMemo: () => TModel = () => {
-    debug && debug("createMemo");
+    if (debug) {
+      debug('createMemo');
+    }
     unsubscribe();
-    const modelFn: UseStream.TModelFn<TModel> =
-      typeof model === "function"
-        ? (model as UseStream.TModelFn<TModel>)
-        : ((() => model) as UseStream.TModelFn<TModel>);
+    const modelFn: UseStream.TModelFn<TModel & UseStream.Model> =
+      typeof model === 'function'
+        ? (model as UseStream.TModelFn<TModel & UseStream.Model>)
+        : ((() => model) as UseStream.TModelFn<TModel & UseStream.Model>);
     const memo = modelFn();
     subscribe(memo);
     return memo;
   };
 
-  const [memo, setMemo] = useState(defer ? null : createMemo);
+  const [memo, setMemo] = React.useState(defer ? null : createMemo);
 
   // Update
-  useEffect(() => {
+  React.useEffect(() => {
     if (!isInitedRef.current) {
       return;
     }
-    debug && debug("Updating");
+    if (debug) {
+      debug('Updating');
+    }
     if (onUpdate) {
       const localMemo = createMemo();
       setMemo(localMemo);
@@ -75,8 +91,10 @@ export const useStream = <TModel>({
   }, deps); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Mount and unmount
-  useEffect(() => {
-    debug && debug("Mounting");
+  React.useEffect(() => {
+    if (debug) {
+      debug('Mounting');
+    }
 
     let localMemo = memo;
     if (defer) {
@@ -89,7 +107,9 @@ export const useStream = <TModel>({
     isInitedRef.current = true;
 
     return () => {
-      debug && debug("Unmounting");
+      if (debug) {
+        debug('Unmounting');
+      }
       unsubscribe();
       if (memo !== null && onDestroy) {
         onDestroy(memo);

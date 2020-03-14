@@ -1,17 +1,18 @@
-const plugins = require("./babel.config.base").plugins;
+import { plugins } from './babel.config.base';
 
 const presets = [
-  ["@babel/preset-env",
+  [
+    '@babel/preset-env',
     {
-      "targets": {
-        "esmodules": true
-      }
-    }
+      targets: {
+        esmodules: true,
+      },
+    },
   ],
-  "@babel/preset-react"
+  '@babel/preset-react',
 ];
 
 module.exports = {
   presets,
-  plugins
+  plugins,
 };

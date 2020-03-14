@@ -26,6 +26,7 @@
   "homepage": "https://github.com/ArthurClemens/use-stream",
   "license": "MIT",
   "peerDependencies": {
+    "debug": "^4.1.1",
     "react": "^16.13.0"
   }
 }
