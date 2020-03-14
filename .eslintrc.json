@@ -1,8 +1,6 @@
 {
   "extends": [
     "plugin:prettier/recommended",
-    "prettier/flowtype",
-    "prettier/react",
     "prettier/standard",
     "airbnb",
     "airbnb/hooks",
@@ -16,29 +14,18 @@
   "parser": "@typescript-eslint/parser",
   "plugins": ["@typescript-eslint", "prettier"],
   "settings": {
-    // "import/parsers": {
-    //   "@typescript-eslint/parser": [".ts", ".tsx"]
-    // },
     "import/resolver": {
       "typescript": {}
     }
   },
   "rules": {
-    "prettier/prettier": "error",
+    "import/no-unresolved": "error",
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/no-explicit-any": [2, { "fixToUnknown": true }],
-    "import/no-extraneous-dependencies": [
-      "error",
-      {
-        "devDependencies": false,
-        "optionalDependencies": false,
-        "peerDependencies": false
-      }
-    ],
     "import/prefer-default-export": "off",
     "react/destructuring-assignment": "off",
     "react/jsx-filename-extension": [
-      2,
+      "error",
       { "extensions": [".js", ".jsx", ".ts", ".tsx"] }
     ],
     "import/extensions": [2, "never"],
