@@ -1,4 +1,4 @@
-# useStream
+# use-stream
 
 A React Hook for working with streams inside function components.
 
