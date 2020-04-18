@@ -30,6 +30,7 @@
     ],
     "import/extensions": [2, "never"],
     "react/jsx-curly-newline": "off", 
-    "react/jsx-uses-react": [2]
+    "react/jsx-uses-react": [2],
+    "no-nested-ternary": "off"
   }
 }
