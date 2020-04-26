@@ -1,7 +1,7 @@
 {
   "name": "test-use-stream",
   "private": true,
-  "version": "0.3.3",
+  "version": "0.3.4",
   "scripts": {
     "start": "DEBUG=test-use-stream:* react-scripts start",
     "build": "react-scripts build",
@@ -14,7 +14,7 @@
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-router-dom": "5.1.2",
-    "use-stream": "^0.3.3"
+    "use-stream": "^0.3.4"
   },
   "devDependencies": {
     "@types/debug": "4.1.5",
