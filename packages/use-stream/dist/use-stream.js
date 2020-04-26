@@ -6,7 +6,6 @@ const useStream = ({ model, onMount, onDestroy, onUpdate, deps = [], defer, debu
     const [streamValues, setStreamValues] = React.useState({});
     // Distinguish update from mount:
     const isInitedRef = React.useRef(false);
-    // Keep reference of all streams that update streamValues so they can be stopped:
     const subsRef = React.useRef([]);
     const subscribe = (memo) => {
         if (debug) {
@@ -15,8 +14,8 @@ const useStream = ({ model, onMount, onDestroy, onUpdate, deps = [], defer, debu
         subsRef.current = Object.keys(memo)
             .map((key) => {
             const stream = memo[key];
-            return stream.map && typeof stream.map === 'function'
-                ? stream.map((value) => {
+            if (stream.map && typeof stream.map === 'function') {
+                return stream.map((value) => {
                     if (debug) {
                         debug('Will update %s', key);
                     }
@@ -25,8 +24,9 @@ const useStream = ({ model, onMount, onDestroy, onUpdate, deps = [], defer, debu
                         [key]: value,
                     });
                     return null;
-                })
-                : null;
+                });
+            }
+            return false;
         })
             .filter(Boolean);
     };

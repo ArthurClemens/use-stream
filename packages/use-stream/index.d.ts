@@ -8,13 +8,15 @@ export function useStream<TModel>(
 export as namespace useStream;
 
 export namespace UseStream {
-  type TStream = {
-    map<V>(project: (value: T) => V): Stream<V>;
-    end: Stream<boolean>;
+  type TStream<T> = {
+    (): T;
+    (value: T): this;
+    map<U>(f: (current: T) => U): TStream<U>;
+    end: TStream<boolean>;
   } & unknown;
 
   interface Model {
-    [key: string]: TStream;
+    [key: string]: TStream<unknown>;
   }
 
   type TModelFn<TModel extends Model> = (_?: unknown) => TModel;

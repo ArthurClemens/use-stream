@@ -20,9 +20,8 @@ export const useStream = <TModel>({
   const isInitedRef = React.useRef(false);
 
   // Keep reference of all streams that update streamValues so they can be stopped:
-  const subsRef: React.MutableRefObject<UseStream.TStream[]> = React.useRef<
-    UseStream.TStream[]
-  >([]);
+  type TSubsRef = UseStream.TStream<unknown>[];
+  const subsRef: React.MutableRefObject<TSubsRef> = React.useRef<TSubsRef>([]);
 
   const subscribe = (memo: TModel) => {
     if (debug) {
@@ -30,23 +29,23 @@ export const useStream = <TModel>({
     }
     subsRef.current = Object.keys(memo)
       .map((key: string) => {
-        const stream: UseStream.TStream = (memo as TModel & UseStream.Model)[
-          key
-        ];
-        return stream.map && typeof stream.map === 'function'
-          ? stream.map((value: unknown) => {
-              if (debug) {
-                debug('Will update %s', key);
-              }
-              setStreamValues({
-                ...streamValues,
-                [key]: value,
-              });
-              return null;
-            })
-          : null;
+        const stream: UseStream.TStream<unknown> = (memo as TModel &
+          UseStream.Model)[key];
+        if (stream.map && typeof stream.map === 'function') {
+          return stream.map((value: unknown) => {
+            if (debug) {
+              debug('Will update %s', key);
+            }
+            setStreamValues({
+              ...streamValues,
+              [key]: value,
+            });
+            return null;
+          });
+        }
+        return false;
       })
-      .filter(Boolean);
+      .filter(Boolean) as TSubsRef;
   };
 
   const unsubscribe = () => {
@@ -54,7 +53,7 @@ export const useStream = <TModel>({
       if (debug) {
         debug('Unsubscribe');
       }
-      subsRef.current.forEach((s: UseStream.TStream) => s.end(true));
+      subsRef.current.forEach((s: UseStream.TStream<unknown>) => s.end(true));
       subsRef.current = [];
     }
   };

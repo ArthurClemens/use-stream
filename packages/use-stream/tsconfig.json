@@ -1,6 +1,6 @@
 {
   "include": [
-    "lib/*",
+    "src/*",
     "index.d.ts"
   ],
   "exclude": [
