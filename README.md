@@ -351,4 +351,4 @@ debug?: Debug.Debugger
 
 ## Size
 
-410 B with all dependencies, minified and gzipped
+536 B with all dependencies, minified and gzipped
