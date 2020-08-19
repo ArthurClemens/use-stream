@@ -1,20 +1,15 @@
 {
-  "include": [
-    "src/*",
-    "index.d.ts"
-  ],
-  "exclude": [
-    "node_modules"
-  ],
+  "include": ["src/*", "index.d.ts"],
+  "exclude": ["node_modules"],
   "compilerOptions": {
     "target": "ESNEXT",
     "module": "ESNEXT",
-    "lib": ["es5", "es2017", "dom"],
     "strict": true,
     "noUnusedLocals": true,
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "types": [], // to disable automatic inclusion of @types packages
@@ -22,6 +17,6 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "preserve"
+    "jsx": "react"
   }
 }
