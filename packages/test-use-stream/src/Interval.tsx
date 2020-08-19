@@ -80,9 +80,11 @@ const Counter: FunctionComponent<TCounter> = (props: TCounter) => {
       const tick = interval({ delay });
       tick.map(() => count(count() + 1));
     },
-    onDestroy: ({ delay }) => {
+    onDestroy: (model) => {
       debug('onDestroy');
-      delay.end(true); // Clean up side effects
+      if (model && model.delay) {
+        delay.end(true); // Clean up side effects
+      }
     },
     debug: debugLib,
   });

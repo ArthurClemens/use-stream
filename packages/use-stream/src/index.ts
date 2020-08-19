@@ -110,7 +110,7 @@ export const useStream = <TModel>({
         debug('Unmounting');
       }
       unsubscribe();
-      if (memo !== null && onDestroy) {
+      if (onDestroy) {
         onDestroy(memo);
       }
     };

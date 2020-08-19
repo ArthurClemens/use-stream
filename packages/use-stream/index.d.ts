@@ -1,5 +1,6 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import Debug from 'debug';
+import { DependencyList } from 'react';
 
 export function useStream<TModel>(
   props: UseStream.UseStreamProps<TModel>,
@@ -10,7 +11,7 @@ export as namespace useStream;
 export namespace UseStream {
   type TStream<T> = {
     (): T;
-    (value: T): this;
+    (value: T): unknown;
     map<U>(f: (current: T) => U): TStream<U>;
     end: TStream<boolean>;
   } & unknown;
@@ -74,12 +75,12 @@ export namespace UseStream {
      * Callback method to clean up side effects. onDestroy is called
      * when the containing component goes out of scope.
      */
-    onDestroy?: (model: TModel) => unknown;
+    onDestroy?: (model: TModel | null) => unknown;
 
     /**
      * React hooks deps array. Default [].
      */
-    deps?: React.DependencyList;
+    deps?: DependencyList;
 
     /**
      * Defers initialization of the model to the mount useEffect.
