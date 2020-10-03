@@ -73,14 +73,14 @@ const App = () => {
 
 ## Live examples
 
-Code examples on CodeSandbox:
-
-* [Simple counter](https://codesandbox.io/s/usestream-simple-counter-futo1)
-* [Simple counter with Flyd (TypeScript)](https://codesandbox.io/s/usestream-simple-counter-with-flyd-85hw6)
-* [James Forbes' useInterval](https://codesandbox.io/s/usestream-with-useinterval-hi9od)
-* [Meisois pattern for a counter](https://codesandbox.io/s/usestream-meiosis-pattern-fsu7e)
-* [Flyd example: simple sum](https://codesandbox.io/s/usestream-flyd-example-sum-0hw32)
-* [Ramda example: filtered input](https://codesandbox.io/s/usestream-ramda-filter-w05t2)
+* [All examples](https://codesandbox.io/dashboard/all/useStream?workspace=214fe89f-3718-4af2-9611-3b2cb150dcc5)
+* Listed examples:
+  * [Simple counter](https://codesandbox.io/s/usestream-simple-counter-futo1)
+  * [Simple counter with Flyd (TypeScript)](https://codesandbox.io/s/usestream-with-flyd-example-simple-counter-85hw6)
+  * [James Forbes' useInterval](https://codesandbox.io/s/usestream-with-useinterval-hi9od)
+  * [Meisois pattern for a counter](https://codesandbox.io/s/usestream-meiosis-pattern-fsu7e)
+  * [Flyd example: simple sum](https://codesandbox.io/s/usestream-flyd-example-sum-0hw32)
+  * [Ramda example: filtered input](https://codesandbox.io/s/usestream-ramda-filter-w05t2)
 
 
 ## Usage
