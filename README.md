@@ -225,7 +225,9 @@ type TModelFn<TModel> = (_?: any) => TModel
 
 Postpones the model initialization until after the first render (in `React.useEffect`). This also prevents that the initialization is called more than once. 
 
-The result of postponing to after the first render is that the model will not be available immediately. This can be handled with a conditional.
+The result of postponing to after the first render is that the model will not be available immediately.
+
+The return contains the model plus boolean `isDeferred`, which can be used for conditional rendering.
 
 Example:
 
@@ -238,12 +240,13 @@ const model = useStream({
   defer: true, // second optimization
 })
 
-if (!model) {
+const { index, count, isDeferred } = model
+
+if (isDeferred) {
   // first render
   return null
 }
 
-const { index, count } = model
 ```
 
 
@@ -351,4 +354,4 @@ debug?: Debug.Debugger
 
 ## Size
 
-536 B with all dependencies, minified and gzipped
+441 B with all dependencies, minified and gzipped

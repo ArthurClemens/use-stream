@@ -1,8 +1,101 @@
+import type Debug from 'debug';
 // eslint-disable-next-line import/no-unresolved
 import React from 'react';
-import { UseStream } from '../index';
 
-export const useStream = <TModel>({
+type DependencyList = ReadonlyArray<unknown>;
+
+type TStream<T> = {
+  (): T;
+  (value: T): unknown;
+  map<U>(f: (current: T) => U): TStream<U>;
+  end: TStream<boolean>;
+} & unknown;
+
+interface IModel {
+  [key: string]: TStream<unknown>;
+}
+
+type TMaybeDeferredModel<TModel extends IModel> = TModel & {
+  isDeferred?: boolean;
+};
+
+type TModelFn<TModel extends IModel> = (
+  _?: unknown,
+) => TMaybeDeferredModel<TModel>;
+
+type TModelGen<TModel extends IModel> = TModel | TModelFn<TModel>;
+
+type Props<TModel extends IModel> = {
+  /**
+   * The model is a POJO object with (optionally multiple) streams.
+   * `useStream` returns this model once it is initialized.
+   *
+   * Example:
+   *
+   * const model = useStream({
+   *   model: {
+   *     index: stream(0),
+   *     count: stream(3)
+   *   }
+   * })
+   *
+   * const { index, count } = model
+   *
+   *
+   * For more flexibility, pass a function that returns the model object. See also `defer`
+   * how to combine this for optimization.
+   *
+   * Example:
+   *
+   * const { index, count } = useStream({
+   *   model: () => {
+   *     const index = stream(0)
+   *     const count = stream(3)
+   *     count.map(console.log) // another stream that is subscribed to the count stream
+   *
+   *     return {
+   *       index,
+   *       count
+   *     }
+   *   }
+   * })
+   */
+  model: TModelGen<TModel>;
+
+  /**
+   * Callback method to run side effects when the containing component is mounted.
+   */
+  onMount?: (model: TModel) => unknown;
+
+  /**
+   * Callback method to run side effects when the containing component is updated through deps.
+   */
+  onUpdate?: (model: TModel) => unknown;
+
+  /**
+   * Callback method to clean up side effects. onDestroy is called
+   * when the containing component goes out of scope.
+   */
+  onDestroy?: (model: TModel | null) => unknown;
+
+  /**
+   * React hooks deps array. Default [].
+   */
+  deps?: DependencyList;
+
+  /**
+   * Defers initialization of the model to the mount useEffect.
+   */
+  defer?: boolean;
+
+  /**
+   * Debugger instance.
+   * See: https://www.npmjs.com/package/debug
+   */
+  debug?: Debug.Debugger;
+};
+
+export const useStream = <TModel extends IModel>({
   model,
   onMount,
   onDestroy,
@@ -10,7 +103,7 @@ export const useStream = <TModel>({
   deps = [],
   defer,
   debug,
-}: UseStream.UseStreamProps<TModel>) => {
+}: Props<TModel>) => {
   // Local storage that connects stream updates to React renders:
   const [streamValues, setStreamValues] = React.useState<{
     [key: string]: unknown;
@@ -20,17 +113,17 @@ export const useStream = <TModel>({
   const isInitedRef = React.useRef(false);
 
   // Keep reference of all streams that update streamValues so they can be stopped:
-  type TSubsRef = UseStream.TStream<unknown>[];
+  type TSubsRef = TStream<unknown>[];
   const subsRef: React.MutableRefObject<TSubsRef> = React.useRef<TSubsRef>([]);
 
-  const subscribe = (memo: TModel) => {
+  const subscribe = (memo: TMaybeDeferredModel<TModel>) => {
     if (debug) {
       debug('Subscribe');
     }
     subsRef.current = Object.keys(memo)
       .map((key: string) => {
-        const stream: UseStream.TStream<unknown> = (memo as TModel &
-          UseStream.Model)[key];
+        const stream: TStream<unknown> = (memo as TMaybeDeferredModel<TModel> &
+          IModel)[key];
         if (stream.map && typeof stream.map === 'function') {
           return stream.map((value: unknown) => {
             if (debug) {
@@ -53,26 +146,30 @@ export const useStream = <TModel>({
       if (debug) {
         debug('Unsubscribe');
       }
-      subsRef.current.forEach((s: UseStream.TStream<unknown>) => s.end(true));
+      subsRef.current.forEach((s: TStream<unknown>) => s.end(true));
       subsRef.current = [];
     }
   };
 
-  const createMemo: () => TModel = () => {
+  const createMemo: () => TMaybeDeferredModel<TModel> = () => {
     if (debug) {
       debug('createMemo');
     }
     unsubscribe();
-    const modelFn: UseStream.TModelFn<TModel & UseStream.Model> =
+    const modelFn: TModelFn<TModel & IModel> =
       typeof model === 'function'
-        ? (model as UseStream.TModelFn<TModel & UseStream.Model>)
-        : ((() => model) as UseStream.TModelFn<TModel & UseStream.Model>);
+        ? (model as TModelFn<TModel & IModel>)
+        : ((() => model) as TModelFn<TModel & IModel>);
     const memo = modelFn();
     subscribe(memo);
     return memo;
   };
 
-  const [memo, setMemo] = React.useState(defer ? null : createMemo);
+  const [memo, setMemo] = React.useState<TMaybeDeferredModel<TModel>>(
+    defer
+      ? ({ ...model, isDeferred: true } as TMaybeDeferredModel<TModel>)
+      : createMemo,
+  );
 
   // Update
   React.useEffect(() => {
