@@ -1,7 +1,7 @@
-import React, { useState, FunctionComponent } from 'react';
-import { useStream } from 'use-stream';
-import flyd from 'flyd';
 import Debug from 'debug';
+import flyd from 'flyd';
+import { useState } from 'react';
+import { useStream } from 'use-stream';
 
 const debug = Debug('test-use-stream:interval');
 debug.enabled = true;
@@ -54,7 +54,7 @@ type TCounter = {
   initDelay: number;
 };
 
-const Counter: FunctionComponent<TCounter> = (props: TCounter) => {
+const Counter = (props: TCounter) => {
   debug('Render Counter');
   const model = useStream<TModel>({
     model: () => {
@@ -80,19 +80,20 @@ const Counter: FunctionComponent<TCounter> = (props: TCounter) => {
       const tick = interval({ delay });
       tick.map(() => count(count() + 1));
     },
-    onDestroy: (model) => {
+    onDestroy: model1 => {
       debug('onDestroy');
-      if (model && model.delay) {
+      if (model1 && model1.delay) {
+        // eslint-disable-next-line @typescript-eslint/no-use-before-define
         delay.end(true); // Clean up side effects
       }
     },
     debug: debugLib,
   });
 
-  if (!model) {
+  const { count, delay, isDeferred } = model;
+  if (isDeferred) {
     return null;
   }
-  const { count, delay } = model;
 
   return (
     <div className="ui segment form demo-section">

@@ -1,16 +1,16 @@
-import React, { FunctionComponent } from 'react';
-import { HashRouter as Router, Route, Link, Switch } from 'react-router-dom';
+import { FunctionComponent } from 'react';
+import { HashRouter as Router, Link, Route, Switch } from 'react-router-dom';
 
-import { IntervalPage } from './Interval';
 import { CounterPage } from './Counter';
+import { IntervalPage } from './Interval';
 
 export type TRoutes = {
-  [key: string]: FunctionComponent<unknown>;
+  [key: string]: FunctionComponent;
 };
 
 const routes: TRoutes = {};
 
-const Home: FunctionComponent<{}> = () => (
+const Home = () => (
   <div className="menu">
     <ul>
       {Object.keys(routes)

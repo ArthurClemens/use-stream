@@ -4,32 +4,34 @@
   "description": "React Hook for working with streams.",
   "main": "dist/use-stream",
   "module": "dist/use-stream.mjs",
-  "type": "module",
   "scripts": {
-    "build": "npm run build:clean && npm run build:module && npm run build:umd && npm run size",
-    "build:clean": "rm -rf dist/*.js",
-    "build:module": "TYPESCRIPT=1 MODULE=1 MODULE_NAME=useStream ../../node_modules/rollup/dist/bin/rollup -c ../../scripts/rollup.config.js",
-    "build:umd": "TYPESCRIPT=1 MODULE=0 MODULE_NAME=useStream ../../node_modules/rollup/dist/bin/rollup -c ../../scripts/rollup.config.js",
+    "build": "node ../../node_modules/npm-run-all/bin/run-s/index.js build:*",
+    "build:clean": "rimraf dist/*",
+    "build:types": "../../node_modules/typescript/bin/tsc --p tsconfig.gen.json",
+    "build:module": "TYPESCRIPT=1 MODULE=1 MODULE_NAME=useStream ../../node_modules/rollup/dist/bin/rollup -c ../../scripts/rollup.config.ts",
+    "build:umd": "TYPESCRIPT=1 MODULE=0 MODULE_NAME=useStream ../../node_modules/rollup/dist/bin/rollup -c ../../scripts/rollup.config.ts",
+    "build:prettier": "../../node_modules/prettier/bin-prettier.js --config ../../.prettierrc.json --write \"./dist/*.d.ts\"",
+    "build:size": "size-limit",
     "typecheck": "../../node_modules/typescript/bin/tsc --p tsconfig.json",
     "test": "react-scripts test --env=jsdom",
-    "size": "size-limit",
-    "size:why": "size-limit --why"
+    "size:why": "size-limit --why",
+    "npm-check-updates": "../../node_modules/npm-check-updates/bin/cli.js -u"
   },
   "devDependencies": {
-    "@size-limit/preset-small-lib": "^4.6.0",
-    "@types/debug": "4.1.5",
-    "@types/react": "^16.9.49",
-    "size-limit": "^4.6.0"
+    "@size-limit/preset-small-lib": "^4.10.2",
+    "@types/debug": "^4.1.5",
+    "@types/react": "^17.0.3",
+    "size-limit": "^4.10.2"
   },
   "peerDependencies": {
-    "debug": "^4.2.0",
-    "react": "^16.13.1"
+    "debug": "^4.3.1",
+    "react": "^17.0.2"
   },
   "files": [
     "dist",
-    "index.d.ts",
     "README.md"
   ],
+  "types": "dist",
   "size-limit": [
     {
       "path": "dist/use-stream.js"

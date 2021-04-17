@@ -1,8 +1,9 @@
-import React, { FunctionComponent } from 'react';
-import { useStream } from 'use-stream';
-import flyd from 'flyd';
-import Debug from 'debug';
 import './styles.css';
+
+import Debug from 'debug';
+import flyd from 'flyd';
+import { FunctionComponent } from 'react';
+import { useStream } from 'use-stream';
 
 const debug = Debug('test-use-stream:counter');
 debug.enabled = true;
@@ -18,12 +19,12 @@ type TModel = {
   count: flyd.Stream<number>;
 };
 
-type TCounter = {
+type Props = {
   id: string;
   count: number;
 };
 
-const Counter: FunctionComponent<TCounter> = (props: TCounter) => {
+const Counter = (props: Props) => {
   debug('Render Counter');
   const { count } = useStream<TModel>(
     (debug('Init model'),

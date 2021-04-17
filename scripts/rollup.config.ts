@@ -4,32 +4,30 @@ import cleanup from 'rollup-plugin-cleanup';
 import { terser } from 'rollup-plugin-terser';
 
 const { env } = process;
-const pkg = JSON.parse(fs.readFileSync('./package.json'));
+const pkg = JSON.parse(fs.readFileSync('./package.json').toString());
 
-const isModule = !!parseInt(env.MODULE, 10);
+const isModule = !!parseInt(env.MODULE || '', 10);
 const format = isModule ? 'es' : 'umd';
-const target = isModule ? 'es5' : undefined;
+const target = isModule ? 'ESNEXT' : 'es2015';
 const file = isModule
   ? `${process.env.DEST || pkg.module}`
   : `${process.env.DEST || pkg.main}.js`;
-const isTypeScript = !!parseInt(env.TYPESCRIPT, 10);
-const input = env.ENTRY || 'src/index.ts';
 
 export default {
-  input,
+  input: 'src/index.ts',
   output: {
     name: env.MODULE_NAME,
     format,
     file,
+    sourcemap: !isModule,
   },
   plugins: [
-    isTypeScript &&
-      typescript({
-        target,
-      }),
-    !isModule && terser(),
+    typescript({
+      target,
+    }),
     cleanup({
       comments: 'none',
     }),
+    !isModule && terser(),
   ],
 };
