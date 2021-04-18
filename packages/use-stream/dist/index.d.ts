@@ -1,5 +1,4 @@
 import type Debug from 'debug';
-
 declare type DependencyList = ReadonlyArray<unknown>;
 declare type TStream<T> = {
   (): T;
