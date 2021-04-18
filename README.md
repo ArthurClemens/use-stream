@@ -22,6 +22,7 @@ A React Hook for working with streams inside function components.
   - [`onDestroy`](#ondestroy)
   - [`debug`](#debug)
 - [Size](#size)
+- [Supported browsers](#supported-browsers)
 
 
 
@@ -355,3 +356,36 @@ debug?: Debug.Debugger
 ## Size
 
 441 B with all dependencies, minified and gzipped
+
+
+## Supported browsers
+
+Output from `npx browserslist`:
+
+```
+and_chr 89
+and_ff 86
+and_qq 10.4
+and_uc 12.12
+android 89
+baidu 7.12
+chrome 90
+chrome 89
+chrome 88
+edge 90
+edge 89
+firefox 87
+firefox 86
+ie 11
+ios_saf 14.0-14.5
+ios_saf 13.4-13.7
+kaios 2.5
+op_mini all
+op_mob 62
+opera 73
+opera 72
+safari 14
+safari 13.1
+samsung 13.0
+samsung 12.0
+```
