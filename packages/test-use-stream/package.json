@@ -3,11 +3,12 @@
   "private": true,
   "version": "0.4.0",
   "scripts": {
-    "start": "DEBUG=test-use-stream:* react-scripts start",
+    "dev": "DEBUG=test-use-stream:* react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "typecheck": "../../node_modules/typescript/bin/tsc --p tsconfig.json",
-    "npm-check-updates": "../../node_modules/npm-check-updates/bin/cli.js -u"
+    "npm-check-updates": "../../node_modules/npm-check-updates/bin/cli.js -u",
+    "lint": "eslint --fix --ext .ts,.tsx ./src"
   },
   "dependencies": {
     "debug": "^4.3.1",
@@ -22,11 +23,5 @@
     "@types/react-router-dom": "5.1.7",
     "react-scripts": "4.0.3",
     "typescript": "4.2.4"
-  },
-  "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not ie <= 11",
-    "not op_mini all"
-  ]
+  }
 }

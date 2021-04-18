@@ -5,3 +5,4 @@ npm-debug.log*
 *.lock
 .rpt2_cache
 react-app-env.d.ts
+packages/test-use-stream/build
