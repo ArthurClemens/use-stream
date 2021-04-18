@@ -3,7 +3,7 @@
   "version": "0.4.0",
   "description": "React Hook for working with streams.",
   "main": "dist/use-stream",
-  "module": "dist/use-stream.mjs",
+  "module": "dist/use-stream.module.js",
   "scripts": {
     "build": "node ../../node_modules/npm-run-all/bin/run-s/index.js build:*",
     "build:clean": "rimraf dist/*",
@@ -12,6 +12,7 @@
     "build:umd": "TYPESCRIPT=1 MODULE=0 MODULE_NAME=useStream ../../node_modules/rollup/dist/bin/rollup -c ../../scripts/rollup.config.ts",
     "build:prettier": "../../node_modules/prettier/bin-prettier.js --config ../../.prettierrc.json --write \"./dist/*.d.ts\"",
     "build:size": "size-limit",
+    "lint": "eslint --fix --ext .ts ./src",
     "typecheck": "../../node_modules/typescript/bin/tsc --p tsconfig.json",
     "test": "react-scripts test --env=jsdom",
     "size:why": "size-limit --why",
