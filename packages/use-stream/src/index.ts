@@ -15,17 +15,15 @@ interface IModel {
   [key: string]: TStream<unknown>;
 }
 
-type TMaybeDeferredModel<TModel extends IModel> = TModel & {
+type TMaybeDeferredModel<TModel> = TModel & {
   isDeferred?: boolean;
 };
 
-type TModelFn<TModel extends IModel> = (
-  _?: unknown,
-) => TMaybeDeferredModel<TModel>;
+type TModelFn<TModel> = (_?: unknown) => TMaybeDeferredModel<TModel>;
 
-type TModelGen<TModel extends IModel> = TModel | TModelFn<TModel>;
+type TModelGen<TModel> = TModel | TModelFn<TModel>;
 
-type Props<TModel extends IModel> = {
+type Props<TModel> = {
   /**
    * The model is a POJO object with (optionally multiple) streams.
    * `useStream` returns this model once it is initialized.
@@ -95,7 +93,7 @@ type Props<TModel extends IModel> = {
   debug?: Debug.Debugger;
 };
 
-export const useStream = <TModel extends IModel>({
+export const useStream = <TModel>({
   model,
   onMount,
   onDestroy,

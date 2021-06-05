@@ -1,22 +1,11 @@
 import type Debug from 'debug';
 declare type DependencyList = ReadonlyArray<unknown>;
-declare type TStream<T> = {
-  (): T;
-  (value: T): unknown;
-  map<U>(f: (current: T) => U): TStream<U>;
-  end: TStream<boolean>;
-} & unknown;
-interface IModel {
-  [key: string]: TStream<unknown>;
-}
-declare type TMaybeDeferredModel<TModel extends IModel> = TModel & {
+declare type TMaybeDeferredModel<TModel> = TModel & {
   isDeferred?: boolean;
 };
-declare type TModelFn<TModel extends IModel> = (
-  _?: unknown,
-) => TMaybeDeferredModel<TModel>;
-declare type TModelGen<TModel extends IModel> = TModel | TModelFn<TModel>;
-declare type Props<TModel extends IModel> = {
+declare type TModelFn<TModel> = (_?: unknown) => TMaybeDeferredModel<TModel>;
+declare type TModelGen<TModel> = TModel | TModelFn<TModel>;
+declare type Props<TModel> = {
   /**
    * The model is a POJO object with (optionally multiple) streams.
    * `useStream` returns this model once it is initialized.
@@ -79,7 +68,7 @@ declare type Props<TModel extends IModel> = {
    */
   debug?: Debug.Debugger;
 };
-export declare const useStream: <TModel extends IModel>({
+export declare const useStream: <TModel>({
   model,
   onMount,
   onDestroy,
