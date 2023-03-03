@@ -29,7 +29,9 @@ jobs:
         with:
           path: |
             ./node_modules
-            ./packages/test-use-stream/node_modules
+            /home/runner/.cache/Cypress
+            ./packages/test-dialogic-react/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
 
       - name: Install dependencies
@@ -48,8 +50,10 @@ jobs:
         with:
           path: |
             ./node_modules
-            ./packages/test-use-stream/node_modules
+            /home/runner/.cache/Cypress
+            ./packages/test-dialogic-react/node_modules
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-      - name: Dialogic core
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+      - name: use-stream test
         working-directory: ./packages/test-use-stream
         run: npm run test
