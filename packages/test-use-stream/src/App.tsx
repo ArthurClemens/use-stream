@@ -1,39 +1,36 @@
-import { FunctionComponent } from 'react';
-import { HashRouter as Router, Link, Route, Switch } from 'react-router-dom';
+import React from 'react';
+import { BrowserRouter, Link, Route, Routes } from 'react-router-dom';
 
 import { CounterPage } from './Counter';
 import { IntervalPage } from './Interval';
 
-export type TRoutes = {
-  [key: string]: FunctionComponent;
-};
+function Home() {
+  return (
+    <div className='menu'>
+      <ul>
+        <li>
+          <Link to='/Counter'>Counter</Link>
+        </li>
+        <li>
+          <Link to='/Interval'>Interval</Link>
+        </li>
+      </ul>
+    </div>
+  );
+}
 
-const routes: TRoutes = {};
+function AppRoutes() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path='/' element={<Home />} />
+        <Route path='/Counter' element={<CounterPage />} />
+        <Route path='/Interval' element={<IntervalPage />} />
+      </Routes>
+    </BrowserRouter>
+  );
+}
 
-const Home = () => (
-  <div className="menu">
-    <ul>
-      {Object.keys(routes)
-        .filter(path => path.substr(1))
-        .map(path => (
-          <li key={path}>
-            <Link to={path}>{path.substr(1)}</Link>
-          </li>
-        ))}
-    </ul>
-  </div>
-);
-
-routes['/'] = Home;
-routes['/IntervalPage'] = IntervalPage;
-routes['/CounterPage'] = CounterPage;
-
-export const App = () => (
-  <Router>
-    <Switch>
-      {Object.keys(routes).map(path => (
-        <Route key={path} path={path} exact component={routes[path]} />
-      ))}
-    </Switch>
-  </Router>
-);
+export function App() {
+  return <AppRoutes />;
+}

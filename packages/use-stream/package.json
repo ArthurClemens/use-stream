@@ -2,42 +2,37 @@
   "name": "use-stream",
   "version": "0.4.2",
   "description": "React Hook for working with streams.",
-  "main": "dist/use-stream",
-  "module": "dist/use-stream.module.js",
-  "scripts": {
-    "build": "node ../../node_modules/npm-run-all/bin/run-s/index.js build:*",
-    "build:clean": "rimraf dist/*",
-    "build:types": "../../node_modules/typescript/bin/tsc --p tsconfig.gen.json",
-    "build:module": "TYPESCRIPT=1 MODULE=1 MODULE_NAME=useStream ../../node_modules/rollup/dist/bin/rollup -c ../../scripts/rollup.config.ts",
-    "build:umd": "TYPESCRIPT=1 MODULE=0 MODULE_NAME=useStream ../../node_modules/rollup/dist/bin/rollup -c ../../scripts/rollup.config.ts",
-    "build:prettier": "../../node_modules/prettier/bin-prettier.js --config ../../.prettierrc.json --write \"./dist/*.d.ts\"",
-    "build:size": "size-limit",
-    "lint": "eslint --fix --ext .ts ./src",
-    "typecheck": "../../node_modules/typescript/bin/tsc --p tsconfig.json",
-    "test": "react-scripts test --env=jsdom",
-    "size:why": "size-limit --why",
-    "npm-check-updates": "../../node_modules/npm-check-updates/bin/cli.js -u"
-  },
-  "devDependencies": {
-    "@size-limit/preset-small-lib": "^4.10.2",
-    "@types/debug": "^4.1.5",
-    "@types/react": "^17.0.3",
-    "size-limit": "^4.10.2"
-  },
-  "peerDependencies": {
-    "debug": "^4.3.1",
-    "react": "^17.0.2"
-  },
+  "main": "./dist/use-stream.umd",
+  "module": "./dist/use-stream.module.js",
+  "type": "module",
   "files": [
     "dist",
     "README.md"
   ],
   "types": "dist",
-  "size-limit": [
-    {
-      "path": "dist/use-stream.js"
+  "exports": {
+    ".": {
+      "require": "./dist/use-stream.cjs",
+      "import": "./dist/use-stream.module.js",
+      "default": "./dist/use-stream.umd.js"
     }
-  ],
+  },
+  "scripts": {
+    "deps": "../../node_modules/npm-check-updates/build/src/bin/cli.js -u",
+    "build": "node ../../node_modules/npm-run-all/bin/run-s/index.js build:*",
+    "build:vite": "vite build",
+    "build:types": "../../node_modules/typescript/bin/tsc --p tsconfig.gen.json"
+  },
+  "dependencies": {
+    "@types/debug": "^4.1.7"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.28"
+  },
+  "peerDependencies": {
+    "debug": "^4.3.1",
+    "react": "*"
+  },
   "author": "Arthur Clemens <arthurclemens@gmail.com> (http://visiblearea.com)",
   "homepage": "https://github.com/ArthurClemens/use-stream",
   "license": "MIT"

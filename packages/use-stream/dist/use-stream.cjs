@@ -1,4 +1,6 @@
-import React from "react";
+"use strict";
+Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
+const React = require("react");
 const useStream = ({
   model,
   onMount,
@@ -92,7 +94,5 @@ const useStream = ({
   }, []);
   return memo;
 };
-export {
-  useStream
-};
-//# sourceMappingURL=use-stream.module.js.map
+exports.useStream = useStream;
+//# sourceMappingURL=use-stream.cjs.map

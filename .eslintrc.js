@@ -6,8 +6,9 @@ module.exports = {
   env: {
     browser: true,
     es6: true,
+    mocha: true,
   },
-  extends: ['airbnb', 'airbnb/hooks', 'prettier'],
+  extends: ['airbnb', 'airbnb/hooks', 'prettier', 'plugin:cypress/recommended'],
   globals: {
     Atomics: 'readonly',
     SharedArrayBuffer: 'readonly',
@@ -28,15 +29,17 @@ module.exports = {
     },
   },
   rules: {
-    'no-void': OFF,
     // note you must disable the base rule as it can report incorrect errors
     'no-use-before-define': OFF,
+    'no-void': OFF,
     '@typescript-eslint/no-use-before-define': ERROR,
-    // note you must disable the base rule as it can report incorrect errors
-    'no-redeclare': OFF,
-    '@typescript-eslint/no-redeclare': ERROR,
 
     'prettier/prettier': ERROR,
+
+    // note you must disable the base rule as it can report incorrect errors
+    'no-shadow': OFF,
+    '@typescript-eslint/no-shadow': [ERROR],
+
     // ESLint rules
     'no-underscore-dangle': OFF,
     'arrow-parens': [ERROR, 'as-needed'],
@@ -48,9 +51,9 @@ module.exports = {
       ERROR,
       {
         devDependencies: true,
-        packageDir: ['.', __dirname],
       },
     ],
+    'no-param-reassign': ['error', { props: false }],
 
     // Sorting rules
     'sort-imports': OFF,
@@ -63,13 +66,12 @@ module.exports = {
 
     // TypeScript rules
     'no-unused-vars': 'off', // disable the native no-unused-vars so that only the TS one is enabled
-    '@typescript-eslint/no-unused-vars': ERROR,
+    '@typescript-eslint/no-unused-vars': OFF,
     '@typescript-eslint/explicit-function-return-type': OFF,
     '@typescript-eslint/no-explicit-any': [ERROR, { fixToUnknown: true }],
 
     // React rules
     'react/require-default-props': OFF,
-    'react-hooks/exhaustive-deps': OFF,
     'react/prop-types': OFF, // otherwise creates false alerts in TS code
     'react/jsx-props-no-spreading': OFF,
     'react/destructuring-assignment': OFF,
