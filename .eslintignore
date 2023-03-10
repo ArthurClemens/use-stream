@@ -1,5 +1,6 @@
 node_modules
 dist
+build
 react-app-env.d.ts
 vite.config.ts
 cypress.config.js

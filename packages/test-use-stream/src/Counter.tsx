@@ -1,8 +1,8 @@
 import './styles.css';
 
 import flyd from 'flyd';
-import { useStream } from 'use-stream';
 import React from 'react';
+import { useStream } from 'use-stream';
 
 type TModel = {
   count: flyd.Stream<number>;
