@@ -1,5 +1,4 @@
 import type Debug from 'debug';
-// eslint-disable-next-line import/no-unresolved
 import React from 'react';
 
 type DependencyList = ReadonlyArray<unknown>;
@@ -102,7 +101,7 @@ export const useStream = <TModel>({
   defer,
   debug,
 }: Props<TModel>) => {
-  // Local storage that connects stream updates to React renders:
+  // Local store that connects stream updates to React renders:
   const [streamValues, setStreamValues] = React.useState<{
     [key: string]: unknown;
   }>({});
@@ -120,8 +119,9 @@ export const useStream = <TModel>({
     }
     subsRef.current = Object.keys(memo)
       .map((key: string) => {
-        const stream: TStream<unknown> = (memo as TMaybeDeferredModel<TModel> &
-          IModel)[key];
+        const stream: TStream<unknown> = (
+          memo as TMaybeDeferredModel<TModel> & IModel
+        )[key];
         if (stream.map && typeof stream.map === 'function') {
           return stream.map((value: unknown) => {
             if (debug) {

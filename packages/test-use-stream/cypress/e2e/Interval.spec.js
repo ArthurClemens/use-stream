@@ -9,6 +9,7 @@ describe('Interval', () => {
   });
 
   it('should show an incremented value', () => {
+    // eslint-disable-next-line cypress/no-unnecessary-waiting
     cy.wait(100);
     cy.get('[data-testid=count]').should($value => {
       const text = $value.text();
@@ -19,12 +20,14 @@ describe('Interval', () => {
   });
 
   it('should show a regular increment', () => {
+    // eslint-disable-next-line cypress/no-unnecessary-waiting
     cy.wait(1500);
     cy.get('[data-testid=count]').should($value => {
       const text = $value.text();
       const value = parseInt(text, 10);
       expect(value).to.equal(10);
     });
+    // eslint-disable-next-line cypress/no-unnecessary-waiting
     cy.wait(1000);
     cy.get('[data-testid=count]').should($value => {
       const text = $value.text();
@@ -38,12 +41,14 @@ describe('Interval', () => {
     cy.get('[data-testid=btn-slower]').click();
     cy.get('[data-testid=btn-slower]').click();
     cy.get('[data-testid=delay]').should('contain', '2000');
+    // eslint-disable-next-line cypress/no-unnecessary-waiting
     cy.wait(1500);
     cy.get('[data-testid=count]').should($value => {
       const text = $value.text();
       const value = parseInt(text, 10);
       expect(value).to.equal(1);
     });
+    // eslint-disable-next-line cypress/no-unnecessary-waiting
     cy.wait(1000);
     cy.get('[data-testid=count]').should($value => {
       const text = $value.text();
