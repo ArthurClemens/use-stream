@@ -1,6 +1,6 @@
 # use-stream
 
-A React Hook for working with streams inside function components.
+A React Hook for working with observable action streams inside function components.
 
 - [Motivation](#motivation)
 - [Example](#example)
@@ -27,7 +27,7 @@ A React Hook for working with streams inside function components.
 
 ## Motivation
 
-[Hooks and Streams](https://james-forbes.com/#!/posts/hooks-and-streams) by James Forbes is a great introduction to streams. The article makes the case why streams are a better approach than hooks: "Streams are a composeable, customizable, time-independent data structure that does everything hooks do and more". Streams are a great way to handle state and to create reactive apps.
+[Hooks and Streams](https://james-forbes.com/#!/posts/hooks-and-streams) by James Forbes is a great introduction to action streams. The article makes the case why streams are a better approach than hooks: "Streams are a composeable, customizable, time-independent data structure that does everything hooks do and more". Streams are a great way to handle state and to create reactive apps.
 
 The downside: streams do not fit neatly within React's component rendering.
 
