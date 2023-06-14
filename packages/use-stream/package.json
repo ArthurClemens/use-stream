@@ -27,7 +27,7 @@
     "@types/debug": "^4.1.7"
   },
   "devDependencies": {
-    "@types/react": "^17.0.53"
+    "@types/react": "^18.0.0"
   },
   "peerDependencies": {
     "debug": "^4.3.1",
